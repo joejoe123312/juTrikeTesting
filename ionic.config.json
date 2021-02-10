@@ -1,0 +1,7 @@
+{
+  "name": "juTrike",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
