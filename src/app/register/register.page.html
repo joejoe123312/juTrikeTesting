@@ -1,45 +1,36 @@
-<ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title style="text-align: center;">Register</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item>
-          <ion-label position="stacked"> First Name </ion-label>
-          <ion-input [(ngModel)]="name" type="text"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked"> Middle Name </ion-label>
-          <ion-input [(ngModel)]="middle" type="text"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked"> Last Name </ion-label>
-          <ion-input [(ngModel)]="last" type="text"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked"> Email </ion-label>
-          <ion-input [(ngModel)]="email" type="email"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked"> Phone Numbr </ion-label>
-          <ion-input [(ngModel)]="phone" type="tel"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked"> Password </ion-label>
-          <ion-input [(ngModel)]="password" type="password"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked"> Confirm Password </ion-label>
-          <ion-input [(ngModel)]="confirmPassword" type="password" (ionChange)="checkPassword()"></ion-input>
+<ion-content>
+  <div class="ion-text-center">
+      <ion-img src="../../assets/map.svg" class="img1 slide-bck-center"></ion-img>
+  </div>
+  <div class="container">
+    <div class="form ion-text-center">
+      <h2>Register </h2>
+      <ion-item lines='none'>
+        <ion-input [(ngModel)]="name" placeholder='Firstname'></ion-input>
+      </ion-item>
+      <ion-item lines='none'>
+        <ion-input [(ngModel)]="middle" placeholder='Middlename'></ion-input>
+      </ion-item>
+      <ion-item lines='none'>
+        <ion-input [(ngModel)]="last" placeholder='Lastname'></ion-input>
+      </ion-item>
+      <ion-item lines='none'>
+        <ion-input [(ngModel)]="email" type="email" placeholder='Email'></ion-input>
+      </ion-item>
+      <ion-item lines='none'>
+        <ion-input [(ngModel)]="phone" type="number" placeholder='Phone Number'></ion-input>
+      </ion-item>
+      <ion-item lines='none'>
+        <ion-input [(ngModel)]="password" type="password" placeholder='Password'></ion-input>
+      </ion-item>
+      <ion-item lines='none'>
+        <ion-input [(ngModel)]="confirmPassword" type="password" placeholder='Confirm Password' (ionChange)="checkPassword()"></ion-input>
           <ion-text *ngIf="password && !passwordMatch" color="danger">Password Do Not Match!</ion-text>
           <ion-text *ngIf="password && passwordMatch" color="success">Password Match!</ion-text>
+      </ion-item>
+      <ion-button expand='block' (click)="register()">Register</ion-button>
+      <ion-button expand='block' [routerLink]="['/login']" color="warning">Cancel</ion-button>
 
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-
-    <ion-button type="submit" [disabled]="!passwordMatch" expand="block" shape="round" color="primary"
-      (click)="register()">Register</ion-button>
-  </ion-card>
-  <ion-content>
+    </div>
+  </div>
+</ion-content>

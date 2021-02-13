@@ -1,9 +1,20 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <ion-button [routerLink]="['/tabs']">Go to tabs</ion-button>
+  <div class="ion-text-center">
+    <ion-img src="../../assets/map.svg" class="img1"></ion-img>
+
+  </div>
+  <div class="container">
+    <div class="form ion-text-center">
+      <h2>Login </h2>
+      <ion-item lines='none'>
+        <ion-input placeholder='Email'></ion-input>
+      </ion-item>
+
+      <ion-item lines='none'>
+        <ion-input placeholder='Password'></ion-input>
+      </ion-item>
+      <ion-button expand='block'>Login</ion-button>
+      <p>Dont Have Account Yet? <a [routerLink]="['/register']">Register Now!</a></p>
+    </div>
+  </div>
 </ion-content>
