@@ -1,0 +1,45 @@
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title style="text-align: center;">Register</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label position="stacked"> First Name </ion-label>
+          <ion-input [(ngModel)]="name" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked"> Middle Name </ion-label>
+          <ion-input [(ngModel)]="middle" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked"> Last Name </ion-label>
+          <ion-input [(ngModel)]="last" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked"> Email </ion-label>
+          <ion-input [(ngModel)]="email" type="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked"> Phone Numbr </ion-label>
+          <ion-input [(ngModel)]="phone" type="tel"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked"> Password </ion-label>
+          <ion-input [(ngModel)]="password" type="password"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked"> Confirm Password </ion-label>
+          <ion-input [(ngModel)]="confirmPassword" type="password" (ionChange)="checkPassword()"></ion-input>
+          <ion-text *ngIf="password && !passwordMatch" color="danger">Password Do Not Match!</ion-text>
+          <ion-text *ngIf="password && passwordMatch" color="success">Password Match!</ion-text>
+
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+
+    <ion-button type="submit" [disabled]="!passwordMatch" expand="block" shape="round" color="primary"
+      (click)="register()">Register</ion-button>
+  </ion-card>
+  <ion-content>

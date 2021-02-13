@@ -22,7 +22,25 @@ const routes: Routes = [
   {
     path: 'driver-otw',
     loadChildren: () => import('./driver-otw/driver-otw.module').then( m => m.DriverOtwPageModule)
-  }
+  },
+  
+  {
+    path: 'register',
+    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
+    path: 'forgot-password',
+    loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
+  },
+  {
+    path: 'change-password',
+    loadChildren: () => import('./change-password/change-password.module').then( m => m.ChangePasswordPageModule)
+  },
+  {
+    path: '**',
+    loadChildren: () => import('./page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
+  },
+
 ];
 @NgModule({
   imports: [
