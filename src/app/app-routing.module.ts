@@ -25,7 +25,6 @@ const routes: Routes = [
     path: 'driver-otw',
     loadChildren: () => import('./driver-otw/driver-otw.module').then( m => m.DriverOtwPageModule)
   },
-  
   {
     path: 'register',
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)

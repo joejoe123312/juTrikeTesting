@@ -32,7 +32,7 @@ export class AuthService
         return of(null);
       }
       })
-    )
+    );
    } //end of constructor
 
    async signIn(email,password)
@@ -40,7 +40,7 @@ export class AuthService
      const loading = await this.LoadingCtrl.create({
        message: 'Authenticating..',
        spinner: 'crescent',
-       showBackdrop:true
+       showBackdrop: true
    });
     loading.present();
     
@@ -84,7 +84,7 @@ export class AuthService
      .then(()=> {
        loading.dismiss();
        this.router.navigate(['/login']);
-     })
+     });
    }
   
     

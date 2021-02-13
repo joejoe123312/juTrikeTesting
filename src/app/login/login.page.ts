@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { AppAlertService } from '../services/app-alert.service'
+import { AppAlertService } from '../services/app-alert.service';
 import { LoadingController } from '@ionic/angular';
 
 @Component({
@@ -13,8 +13,7 @@ export class LoginPage implements OnInit {
 
   email: string;
   password: string;
-  constructor
-  (
+  constructor(
     private router: Router,
     private auth: AuthService,
     private alert: AppAlertService,
@@ -25,14 +24,13 @@ export class LoginPage implements OnInit {
   }
   async login()
   {
-    if(this.email && this.password)
+    if (this.email && this.password)
     {
-    this.auth.signIn(this.email,this.password)
+    this.auth.signIn(this.email, this.password);
     } else {
-    this.alert.presentToast('Please Enter Your Email and Password','warning',5000)
+    this.alert.presentToast('Please Enter Your Email and Password', 'warning', 5000);
     }
-  } //end of login
-  
+  } // end of login
 
 
 
