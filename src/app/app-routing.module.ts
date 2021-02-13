@@ -14,6 +14,14 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'travel-cost',
+    loadChildren: () => import('./travel-cost/travel-cost.module').then( m => m.TravelCostPageModule)
+  },
+  {
+    path: 'driver-otw',
+    loadChildren: () => import('./driver-otw/driver-otw.module').then( m => m.DriverOtwPageModule)
   }
 ];
 @NgModule({

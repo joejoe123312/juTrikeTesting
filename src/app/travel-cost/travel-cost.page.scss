@@ -1,0 +1,41 @@
+ion-label.inputs{
+    font-weight: bold;
+}
+
+ion-img.locationImage{
+    height:200px;
+    width:200px;
+}
+
+ion-card.travelSummary{
+    height: 300px;
+}
+
+ion-header.Curve{
+    text-align: center;
+	width: 100%;
+	height: auto;
+	background-attachment: fixed;
+	position: relative;
+	overflow: hidden;
+	border-radius: 0 0 85% 85% / 50%;
+}
+
+p{
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+ion-card-title.summaryHeader{
+    font-weight: bold;
+    font-size: 30px;
+}
+
+b{
+    color:black;
+}
+
+ion-button.proceedBtn{
+    font-weight: bold;
+    font-size: 20px;
+}
