@@ -29,7 +29,7 @@ ion-content {
   -webkit-animation: slide-in-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
     both;
   animation: slide-in-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  min-height: 500px;
+  min-height: 300px;
   width: 100%;
   background-color: white;
   bottom: 0;
@@ -49,7 +49,7 @@ ion-content {
 }
 ion-button {
   --background: linear-gradient(135deg, #52e5e7 10%, #130cb7 100%);
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 .form {
@@ -59,7 +59,7 @@ ion-button {
     border-radius: 10px;
     border-width: 2px;
     border-color: grey;
-    margin-top: 20px;
+    margin-top: 10px;
   }
 }
 /* ----------------------------------------------

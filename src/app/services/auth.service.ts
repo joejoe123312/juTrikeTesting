@@ -5,7 +5,7 @@ import * as firebase from 'firebase';
 import { LoadingController , ToastController } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { count, switchMap } from 'rxjs/operators';
 import { AppAlertService } from './app-alert.service';
 import { User } from '../models/users';
 
@@ -57,7 +57,7 @@ export class AuthService
         else
         {
           loading.dismiss();
-          this.router.navigate(['/list']);
+          this.router.navigate(['/tabs/home']);
         }
       })
       .catch(error =>{
@@ -74,8 +74,9 @@ export class AuthService
    async signOut()
    {
      const loading = await this.LoadingCtrl.create({
+       message:'Logging out.....',
        spinner:'crescent',
-       showBackdrop:true
+       showBackdrop:true,
      });
      loading.present();
 

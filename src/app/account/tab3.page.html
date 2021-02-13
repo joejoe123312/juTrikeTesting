@@ -16,9 +16,8 @@
   </ion-card>
   <ion-card class="cards-main">
   <ion-card-content class="card-content-main ion-padding">
-    <ion-card-title> Jhay Ramirez</ion-card-title>
-    <ion-card-subtitle style="text-align: justify;">#14 Sampaguita Street,Tuguegarao City</ion-card-subtitle>
-    <ion-card-subtitle>09279949474</ion-card-subtitle>
+    <ion-card-title>{{ user?.fullName}}</ion-card-title>
+    <ion-card-subtitle>{{ user?.userPhone}}</ion-card-subtitle>
   </ion-card-content>
   <ion-button (click)="presentActionSheet()" class="ion-float-right" shape="round" style="margin-right:10px; margin-bottom:10px">
     <ion-icon name="person-circle" slot="start"></ion-icon>

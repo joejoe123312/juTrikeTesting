@@ -7,14 +7,16 @@
     <div class="form ion-text-center">
       <h2>Login </h2>
       <ion-item lines='none'>
-        <ion-input placeholder='Email'></ion-input>
+        <ion-input [(ngModel)]="email" placeholder='Email' type="email"></ion-input>
       </ion-item>
 
       <ion-item lines='none'>
-        <ion-input placeholder='Password'></ion-input>
+        <ion-input [(ngModel)]="password" placeholder='Password' type="password"></ion-input>
       </ion-item>
-      <ion-button expand='block'>Login</ion-button>
+      <ion-button expand='block' (click)="login()">Login</ion-button>
       <p>Dont Have Account Yet? <a [routerLink]="['/register']">Register Now!</a></p>
+              <a [routerLink]="['/forgot-password']">Forgot Password?</a>
+
     </div>
   </div>
 </ion-content>

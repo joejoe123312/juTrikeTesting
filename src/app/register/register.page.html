@@ -25,9 +25,9 @@
       </ion-item>
       <ion-item lines='none'>
         <ion-input [(ngModel)]="confirmPassword" type="password" placeholder='Confirm Password' (ionChange)="checkPassword()"></ion-input>
-          <ion-text *ngIf="password && !passwordMatch" color="danger">Password Do Not Match!</ion-text>
-          <ion-text *ngIf="password && passwordMatch" color="success">Password Match!</ion-text>
       </ion-item>
+      <ion-text *ngIf="password && !passwordMatch" color="danger"><small>Password Do Not Match!</small></ion-text>
+      <ion-text *ngIf="password && passwordMatch" color="success"><small>Password Match!</small></ion-text>
       <ion-button expand='block' (click)="register()">Register</ion-button>
       <ion-button expand='block' [routerLink]="['/login']" color="warning">Cancel</ion-button>
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-tab3',
@@ -8,12 +9,20 @@ import { ActionSheetController } from '@ionic/angular';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
-
-  constructor
-  (
-    private actionSheetController:ActionSheetController,
+  user: any;
+  constructor(
+    private actionSheetController: ActionSheetController,
     private router: Router,
+    private auth: AuthService
+
   ) {}
+  // tslint:disable-next-line: use-lifecycle-interface
+  ngOnInit()
+  {
+    this.auth.user$.subscribe(user => {
+      this.user = user;
+    });
+  }
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
       header: 'Actions',
@@ -29,10 +38,11 @@ export class Tab3Page {
         text: 'Log out',
         icon: 'log-out',
         handler: () => {
-          alert('Go to logout!');
-          this.router.navigate(['./login']);
+        this.auth.signOut();
+
         }
-      },]
+      },
+    ]
     });
     await actionSheet.present();
   }
