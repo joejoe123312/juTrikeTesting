@@ -1,27 +1,23 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
+<ion-header class="Curve" [translucent]="true">
+    <ion-toolbar class="color" color="primary">
+      
+      <h1><strong>JuTrike!</strong></h1>
+      
     </ion-toolbar>
   </ion-header>
+  
+  <ion-content >
 
-  <ion-card>
-    <ion-card-content>
-    <ion-card-title>
-      This is Second Page
-    </ion-card-title>
-    <ion-card-subtitle>
-      Some text here .....
-    </ion-card-subtitle>
-      This is Second Page in second Tabs
-    </ion-card-content>
-  </ion-card>
-</ion-content>
+
+    <ion-card class="cards">
+      
+      <ion-card-content>
+        <ion-card-title class="ion-text-center">
+            Put your map here
+        </ion-card-title>
+      </ion-card-content>
+    </ion-card>
+    <ion-button shape="block" [routerLink]="['/travel-cost']">Book Now</ion-button>
+  
+  </ion-content>
+  
