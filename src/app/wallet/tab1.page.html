@@ -25,9 +25,8 @@
   <ion-card-content class="card-content-main ion-padding" style="display:flex;">
     <div class="icons ion-row">
       <ion-button shape="round"><ion-icon name="card-sharp"></ion-icon></ion-button>
-      <ion-button shape="round"><ion-icon name="scan-sharp"></ion-icon></ion-button>
-      <ion-button shape="round"><ion-icon name="bag-add-sharp"></ion-icon></ion-button>
-      <ion-button shape="round"><ion-icon name="trophy-sharp"></ion-icon></ion-button>
+      <ion-button shape="round" [routerLink]="['/scan-qrcode']"><ion-icon name="scan-outline"></ion-icon></ion-button>
+      <ion-button shape="round" [routerLink]="['/view-qrcode']"><ion-icon name="qr-code-outline"></ion-icon></ion-button>
     </div>
   </ion-card-content>
 </ion-card>
