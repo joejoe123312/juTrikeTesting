@@ -38,12 +38,8 @@ const routes: Routes = [
     loadChildren: () => import('./change-password/change-password.module').then( m => m.ChangePasswordPageModule)
   },
   {
-    path: 'view-qrcode',
-    loadChildren: () => import('./view-qrcode/view-qrcode.module').then( m => m.ViewQRCodePageModule)
-  },
-   {
-    path: 'scan-qrcode',
-    loadChildren: () => import('./scan-qrcode/scan-qrcode.module').then( m => m.ScanQrcodePageModule)
+    path: 'updateCurrentUser',
+    loadChildren: () => import('./update-current-user-profile/update-current-user-profile.module').then( m => m.UpdateCurrentUserProfilePageModule)
   },
   {
     path: '**',

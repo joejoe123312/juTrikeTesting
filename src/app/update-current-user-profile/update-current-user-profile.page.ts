@@ -64,6 +64,7 @@ info:any;
       'firstName' : this.name,
       'LastName' : this.last,
       'userPhone' : this.phone,
+      'fullName' : this.name + " " + this.last,
       'editAt':Date.now() 
     },{merge:true})
     .then(()=>{
