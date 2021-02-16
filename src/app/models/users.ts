@@ -1,10 +1,10 @@
 export interface User 
 {
         userId: string;
-        userName: string;
-        userMiddle:string;
-        userLast:string;
-        userfullName:string;
+        firstName: string;
+        LastName:string;
+        // lastName:string;
+        fullName:string;
         userEmail: string;
         userPhone: string;
         userPhoto: string;

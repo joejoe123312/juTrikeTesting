@@ -9,7 +9,7 @@ import { LoadingController, ToastController } from '@ionic/angular';
 @Injectable({
   providedIn: 'root'
 })
-export class CrudServicesService {
+export class CrudServiceService {
 
   constructor(
     private afs: AngularFirestore,

@@ -38,9 +38,14 @@ const routes: Routes = [
     loadChildren: () => import('./change-password/change-password.module').then( m => m.ChangePasswordPageModule)
   },
   {
+    path: 'updateCurrentUser',
+    loadChildren: () => import('./update-current-user-profile/update-current-user-profile.module').then( m => m.UpdateCurrentUserProfilePageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
-  },
+  }
+
 
 ];
 @NgModule({

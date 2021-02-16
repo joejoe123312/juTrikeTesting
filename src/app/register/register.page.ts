@@ -13,8 +13,7 @@ import { LoadingController, ToastController } from '@ionic/angular';
 export class RegisterPage implements OnInit {
   
   name:string;
-  middle:string;
-  last:string;
+  Last:string;
   fullName:string;
   email:string;
   password:string;
@@ -45,7 +44,7 @@ export class RegisterPage implements OnInit {
 
   async register()
   {
-    if(this.name && this.email && this.phone && this.password)
+    if(this.name && this.Last && this.phone && this.password)
     {
         const loading = await this.loadingCtrl.create({
           message: 'loading...',
@@ -59,9 +58,9 @@ export class RegisterPage implements OnInit {
           this.afs.collection('user').doc(data.user.uid).set({
             'userId':data.user.uid,
             'firstName' : this.name,
-            'middleName':this.middle,
-            'lastName:':this.last,
-            'fullName':this.name + " " + this.middle + " " + this.last ,
+            'LastName':this.Last,
+            // 'lastName:':this.last,
+            'fullName':this.name + " " + this.Last ,
             'userEmail': this.email,
             'userPhone': this.phone,
             'createdAt' : Date.now()

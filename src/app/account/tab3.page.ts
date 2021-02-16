@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
 
@@ -10,10 +11,14 @@ import { AuthService } from '../services/auth.service';
 })
 export class Tab3Page {
   user: any;
+  userId:any;
+  todoId:string;
   constructor(
     private actionSheetController: ActionSheetController,
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private route: ActivatedRoute,
+    private fauth: AngularFireAuth,
 
   ) {}
   // tslint:disable-next-line: use-lifecycle-interface
@@ -22,7 +27,9 @@ export class Tab3Page {
     this.auth.user$.subscribe(user => {
       this.user = user;
     });
+      
   }
+ 
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
       header: 'Actions',
@@ -32,14 +39,13 @@ export class Tab3Page {
         role: 'Edit profile of user',
         icon: 'create',
         handler: () => {
-            alert('Show Profile to edit.');
+        this.router.navigate(['updateCurrentUser']);
         }
       }, {
         text: 'Log out',
         icon: 'log-out',
         handler: () => {
         this.auth.signOut();
-
         }
       },
     ]

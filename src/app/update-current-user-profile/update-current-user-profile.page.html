@@ -1,0 +1,25 @@
+<ion-content>
+  <div class="ion-text-center">
+    <ion-img src="../../assets/update.svg" class="img1 slide-bck-center"></ion-img>
+  </div>
+  <div class="container">
+    <div class="form ion-text-center">
+      <h2 style="margin-bottom: 5px;">Update  </h2>
+      <ion-item lines='none'>
+        <ion-input [(ngModel)]="name" placeholder='Firstname'></ion-input>
+      </ion-item>
+      <ion-item lines='none'>
+        <ion-input [(ngModel)]="last" placeholder='Lastname'></ion-input>
+      </ion-item>
+      <ion-item lines='none'>
+        <ion-input [(ngModel)]="phone" type="number" placeholder='Phone Number'></ion-input>
+      </ion-item>
+      <br><br><br><br>
+        <ion-button expand='block' (click)="updateProfile()">Update</ion-button>
+        <ion-button expand='block' [routerLink]="['/tabs/account']" color="warning">Cancel</ion-button>
+    </div>
+    
+   
+  </div>
+  
+</ion-content>

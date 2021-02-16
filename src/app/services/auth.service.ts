@@ -33,7 +33,8 @@ export class AuthService
       }
       })
     );
-   } //end of constructor
+    
+  } //end of constructor
 
    async signIn(email,password)
    {
