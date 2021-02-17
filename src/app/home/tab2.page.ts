@@ -17,9 +17,9 @@ declare var google: any;
 })
 export class Tab2Page {
     @ViewChild('map', {read: ElementRef, static:false}) mapRef:ElementRef;
-user: any;
-userId:any;
-map:any;
+  user: any;
+  userId:any;
+  map:any;
  infoWindow: any;
   constructor(
         private auth: AuthService,
@@ -37,9 +37,11 @@ map:any;
     this.auth.user$.subscribe(user =>
       {
       this.user = user;
+      localStorage.setItem('userInfo', JSON.stringify(user));
     });
     this.initMap();
   }
+
  initMap() {
   this.map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: -34.397, lng: 150.644 },

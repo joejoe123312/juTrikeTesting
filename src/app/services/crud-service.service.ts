@@ -53,7 +53,7 @@ export class CrudServiceService {
 
       if (navigate != '') {
         // kung gusto mo siyang i redirect mag provide ka ng third parameter, else meron siyang default na empty string
-        this.router.navigate(['/list']); 
+        this.router.navigate([navigate]); 
       }
 
     })
