@@ -42,6 +42,14 @@ const routes: Routes = [
     loadChildren: () => import('./update-current-user-profile/update-current-user-profile.module').then( m => m.UpdateCurrentUserProfilePageModule)
   },
   {
+  path: 'scan-qr',
+  loadChildren: () => import('./scan-qrcode/scan-qrcode.module').then( m => m.ScanQrcodePageModule)
+  },
+  {
+  path: 'view-qr',
+  loadChildren: () => import('./view-qrcode/view-qrcode.module').then( m => m.ViewQRCodePageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
   }
