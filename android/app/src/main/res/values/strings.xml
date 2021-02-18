@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">juTrike</string>
-    <string name="title_activity_main">juTrike</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">juTrikeTesting</string>
+    <string name="title_activity_main">juTrikeTesting</string>
+    <string name="package_name">com.juTrikeTesting.yagit</string>
+    <string name="custom_url_scheme">com.juTrikeTesting.yagit</string>
 </resources>

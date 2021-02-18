@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "juTrike",
+  "appId": "com.juTrikeTesting.yagit",
+  "appName": "juTrikeTesting",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
@@ -9,7 +9,17 @@
       "launchShowDuration": 0
     }
   },
-  "cordova": {},
+  "cordova": {
+    "preferences": {
+      "ScrollEnabled": "false",
+      "BackupWebStorage": "none",
+      "SplashMaintainAspectRatio": "true",
+      "FadeSplashScreenDuration": "300",
+      "SplashShowOnlyFirstTime": "false",
+      "SplashScreen": "screen",
+      "SplashScreenDelay": "3000"
+    }
+  },
   "server": {
     "url": "https://localhost:8100"
   }

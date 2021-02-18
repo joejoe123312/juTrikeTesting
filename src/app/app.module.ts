@@ -27,7 +27,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 
-
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
 
 @NgModule({
@@ -41,8 +41,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    AngularFireStorageModule
-
+    AngularFireStorageModule,
     
   ],
   providers: [
@@ -50,7 +49,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
     AuthGuard,
     Geolocation,
     NativeGeocoder,
-    
+    BarcodeScanner,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
