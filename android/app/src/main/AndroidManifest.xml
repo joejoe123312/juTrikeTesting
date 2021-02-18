@@ -41,7 +41,7 @@
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
     </application>
-
+0
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />

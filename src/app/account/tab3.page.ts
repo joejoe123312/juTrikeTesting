@@ -29,7 +29,6 @@ export class Tab3Page {
     });
       
   }
- 
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
       header: 'Actions',

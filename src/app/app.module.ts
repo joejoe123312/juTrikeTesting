@@ -23,7 +23,8 @@ import { AuthService } from './services/auth.service';
 
 // This Import is for AUTHENTICATION GUARD  x x x MiddleWare
 import { AuthGuard } from './guards/auth.guard';
-
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 
 
@@ -41,11 +42,15 @@ import { AuthGuard } from './guards/auth.guard';
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule
+
     
   ],
   providers: [
     AuthService,
     AuthGuard,
+    Geolocation,
+    NativeGeocoder,
+    
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
