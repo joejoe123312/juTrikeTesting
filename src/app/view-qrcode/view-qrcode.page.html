@@ -1,12 +1,21 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>viewQRCode</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/wallet"></ion-back-button>
-    </ion-buttons>
+<ion-header class="Curve" [translucent]="true">
+  <ion-toolbar class="color" color="primary">
+    <h1><strong>JuTrike!</strong></h1>
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-card>
+    <ion-card-content class="ion-text-center">
+      <h1>Scan me</h1>
+      <ngx-qrcode [elementType]="elementType" [value]="qrData" cssClass="aclass" errorCorrectionLevel="L">
+      </ngx-qrcode>
+    </ion-card-content>
+  </ion-card>
 
+  <ion-button expand="block" color="dark" [routerLink]="['/tabs/wallet']">
+  <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+    Back
+  </ion-button>
 </ion-content>

@@ -8,12 +8,15 @@ import { ViewQRCodePageRoutingModule } from './view-qrcode-routing.module';
 
 import { ViewQRCodePage } from './view-qrcode.page';
 
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ViewQRCodePageRoutingModule
+    ViewQRCodePageRoutingModule,
+    NgxQRCodeModule
   ],
   declarations: [ViewQRCodePage]
 })
