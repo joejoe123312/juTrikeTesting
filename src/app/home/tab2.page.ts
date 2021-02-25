@@ -59,6 +59,7 @@ export class Tab2Page {
     this.geolocation.getCurrentPosition().then((resp) => {
       let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
       let mapOptions = {
+        componentRestrictions: { country: "ph", },
         center: latLng,
         zoom: 17,
         disableDefaultUI: true,
@@ -116,7 +117,17 @@ export class Tab2Page {
       this.autocompleteItems = [];
       return;
     }
+
+    // set default bounds 
+    var defaultBounds = new google.maps.LatLngBounds(
+              new google.maps.LatLng(17.61306, 121.72694),
+              new google.maps.LatLng(364930.52061419, 364930.52061419));
+    
     this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input },
+
+      // set bias as second parameter
+    // { bounds: defaultBounds, strictBounds: true },
+
     (predictions, status) => {
       this.autocompleteItems = [];
       this.zone.run(() => {

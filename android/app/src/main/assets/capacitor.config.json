@@ -21,7 +21,6 @@
     }
   },
   "server": {
-    "url": "https://192.168.1.8:8100",
-    "originalUrl": "https://localhost:8100"
+    "url": "https://localhost:8100"
   }
 }
