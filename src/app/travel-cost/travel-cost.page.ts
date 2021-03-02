@@ -20,13 +20,8 @@ export class TravelCostPage implements OnInit {
 
   ngOnInit() 
   {
-    // const usersInfo = JSON.parse(localStorage.getItem('userInfo'));
-    // this.userInfo = usersInfo;
-    
-    // // assign his full name
-    // this.fullName = usersInfo.fullName; 
+
   }
-  
   proceed(){
     // configure object
     let objectSet = {
@@ -47,5 +42,4 @@ export class TravelCostPage implements OnInit {
     // create field in the db
     this.crudService.create('bookings', objectSet, '/driver-otw');
   }
-
 }
