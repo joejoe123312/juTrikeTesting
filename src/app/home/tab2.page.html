@@ -12,7 +12,7 @@
         <h2>{{ user?.firstName }}</h2>
       </ion-label>
  
-      <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="UpdateSearchResults()" value="Tuguegarao City,Cagayan" placeholder="Search for a place"
+      <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="UpdateSearchResults($event.target.value)" value="Tuguegarao City,Cagayan" placeholder="Search for a place"
         (ionClear)="ClearAutocomplete()"></ion-searchbar>
     
     <ion-list [hidden]="autocompleteItems.length == 0">

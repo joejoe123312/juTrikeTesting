@@ -23,7 +23,12 @@ export class Tab2Page {
   map: any;
   address:string;
   lat: string;
-  long: string;  
+  long: string; 
+
+  // used when autocomplete has been clicked
+  latitude: any;
+  longitude: any;
+
   autocomplete: { input: string; };
   autocompleteItems: any[];
   location: any;
@@ -39,11 +44,13 @@ export class Tab2Page {
         private geolocation: Geolocation,
         private nativeGeocoder: NativeGeocoder,    
         public zone: NgZone,
+        
   ) 
   {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
+    const geocoder = new google.maps.Geocoder();
    }
 // tslint:disable-next-line: use-lifecycle-interface
   //LOAD THE MAP ONINIT.
@@ -79,7 +86,6 @@ export class Tab2Page {
       this.getAddressFromCoords(resp.coords.latitude, resp.coords.longitude); 
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions); 
       this.map.addListener('tilesloaded', () => {
-        console.log('accuracy',this.map, this.map.center.lat());
         this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
         this.lat = this.map.center.lat()
         this.long = this.map.center.lng()
@@ -90,8 +96,9 @@ export class Tab2Page {
   }
 
   
+
+  
   getAddressFromCoords(lattitude, longitude) {
-    console.log("getAddressFromCoords "+lattitude+" "+longitude);
     let options: NativeGeocoderOptions = {
       useLocale: true,
       maxResults: 5    
@@ -121,47 +128,112 @@ export class Tab2Page {
   }
   
   //AUTOCOMPLETE, SIMPLY LOAD THE PLACE USING GOOGLE PREDICTIONS AND RETURNING THE ARRAY.
-  UpdateSearchResults(){
+  UpdateSearchResults(searchValue:string){
+    this.autocomplete.input = searchValue;
+
     if (this.autocomplete.input == '') {
       this.autocompleteItems = [];
       return;
     }
-
+    
     const defaultBounds = {
       north: 17.6867129,
       south: 17.5174437,
       east: 121.8369136,
       west: 121.6820089,
     };
-
+    
     let request = {
       input: this.autocomplete.input,
-      bounds:defaultBounds,
-      componentRestrictions: {counter: "ph"},
+      bounds: defaultBounds,
+      componentRestrictions: { country: "ph" },
+      // location: defaultBounds,
+      // radius: 1500,
     }
     
-    this.GoogleAutocomplete.getPlacePredictions(request ,
+    this.GoogleAutocomplete.getPlacePredictions(request,
     (predictions, status) => {
-      
-      
-      this.autocompleteItems = [];
-      this.zone.run(() => {
-        
-        predictions.forEach((prediction) => {
-          this.autocompleteItems.push(prediction);
+      if (predictions != null) {
+        this.autocompleteItems = [];
+        this.zone.run(() => {
+          predictions.forEach((prediction) => {
+            this.autocompleteItems.push(prediction);
+          });
         });
-      });
+      }else{
+        this.autocompleteItems = [];
+      }
     });
   }
   
   //wE CALL THIS FROM EACH ITEM.
   SelectSearchResult(item) {
     ///WE CAN CONFIGURE MORE COMPLEX FUNCTIONS SUCH AS UPLOAD DATA TO FIRESTORE OR LINK IT TO SOMETHING
-    alert(JSON.stringify(item))      
-    this.placeid = item.place_id
+    
+    let address = item.description;
+    var geocoder = new google.maps.Geocoder();
+  
+    geocoder.geocode( { 'address': address}, function(results, status) {
+
+      if (status == google.maps.GeocoderStatus.OK) {
+          const lat = results[0].geometry.location.lat();
+          const long = results[0].geometry.location.lng();
+          
+          // CHange the pointer
+          // Dito yung taas
+          let latLng = new google.maps.LatLng(lat, long);
+            let mapOptions = {
+              center: latLng,
+              zoom: 17,
+              disableDefaultUI: true,
+              restriction: {
+                latLngBounds: {
+                  north: 17.6867129,
+                  south: 17.5174437,
+                  east: 121.8369136,
+                  west: 121.6820089,
+                },
+              },
+              // mapTypeId: google.maps.MapTypeId.ROADMAP
+            } 
+            latLng = new google.maps.Map(document.getElementById('map'), mapOptions);
+        }
+        
+    });
+
+  }
+
+  changePointer(lat, long){
+  // Dito yung taas
+  let latLng = new google.maps.LatLng(lat, long);
+    let mapOptions = {
+      center: latLng,
+      zoom: 17,
+      disableDefaultUI: true,
+      restriction: {
+        latLngBounds: {
+          north: 17.6867129,
+          south: 17.5174437,
+          east: 121.8369136,
+          west: 121.6820089,
+        },
+      },
+      // mapTypeId: google.maps.MapTypeId.ROADMAP
+    } 
+    latLng = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+    //LOAD THE MAP WITH THE PREVIOUS VALUES AS PARAMETERS.
+    this.getAddressFromCoords(lat, long); 
+    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions); 
+    this.map.addListener('tilesloaded', () => {
+      console.log('accuracy',this.map, this.map.center.lat());
+      this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
+      this.lat = this.map.center.lat()
+      this.long = this.map.center.lng()
+    });
   }
   
-  
+
   //lET'S BE CLEAN! THIS WILL JUST CLEAN THE LIST WHEN WE CLOSE THE SEARCH BAR.
   ClearAutocomplete(){
     this.autocompleteItems = []
