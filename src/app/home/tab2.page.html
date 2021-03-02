@@ -1,8 +1,6 @@
 <ion-header class="Curve" [translucent]="true">
-    <ion-toolbar class="color" color="primary">
-      
-      <h1><strong>JuTrike!</strong></h1>
-      
+    <ion-toolbar class="color" color="primary">  
+      <h1><strong>JuTrike!</strong></h1>   
     </ion-toolbar>
   </ion-header>
   
@@ -21,28 +19,28 @@
       </ion-item>
     </ion-list>
     <ion-row>
-      <ion-col size="6">
-      </ion-col>
-      <ion-col size="6">
-        <ion-button (click)="loadMap()" shape="round" fill="outline">
+
+      <ion-col size="" class="Right">
+        <ion-button (click)="loadMap()" shape="round" fill="outline" style=" float: right;
+        padding: 10px;">
           <ion-icon slot="start" name="locate"></ion-icon>
           Where I Am
         </ion-button>
       </ion-col>
     </ion-row>
-  <ion-content>
     <ion-fab vertical="bottom" horizontal="start" slot="fixed">
       <ion-fab-button (click)="ShowCords()" ion-fab color="tertiary">
         <ion-icon name="information-circle-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab>
-    <div class="map-wrapper" style="height: 100%;">
-      <div id="map_center">
-        <ion-icon name="pin" size="large" color="danger"></ion-icon>
-      </div>
-      <div #map id="map" style="height: 100%;"></div>
+
+    <div class="map-wrapper" style="height: 50%;">
+    <div id="map_center">
+    <ion-icon name="pin" size="large" color="danger"></ion-icon>
     </div>
-  </ion-content>
+    <div #map id="map" style="height: 100%;"></div>
+    </div>
+    <br><br>
     <ion-button shape="block" [routerLink]="['/travel-cost']">Book Now</ion-button>
   </ion-content>
   
