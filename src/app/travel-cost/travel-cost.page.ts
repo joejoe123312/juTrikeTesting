@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { CrudServiceService } from '../services/crud-service.service';
+import { MapsService } from '../services/maps.service';
 import { UserServiceService } from '../services/user-service.service';
 
 @Component({
@@ -11,16 +12,19 @@ import { UserServiceService } from '../services/user-service.service';
 export class TravelCostPage implements OnInit {
   userInfo:object;
   fullName:string;
+  pickUpLocation: any;
 
   constructor(
     private fauth : AuthService,
     private userService: UserServiceService,
     private crudService: CrudServiceService,
+    private mapsService: MapsService,
   ) { }
 
   ngOnInit() 
   {
-
+    this.pickUpLocation = this.mapsService.getPickUpLocation();
+    console.log(this.pickUpLocation);
   }
   proceed(){
     // configure object

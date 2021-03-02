@@ -10,6 +10,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { ViewChild , ElementRef } from '@angular/core';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { MapsService } from '../services/maps.service';
 
 declare var google: any;
 
@@ -28,6 +29,7 @@ export class Tab2Page {
   // used when autocomplete has been clicked
   latitude: any;
   longitude: any;
+  pickUpLocation: string;
 
   autocomplete: { input: string; };
   autocompleteItems: any[];
@@ -45,6 +47,7 @@ export class Tab2Page {
         private nativeGeocoder: NativeGeocoder,    
         public zone: NgZone,
         
+        public mapsService: MapsService,
   ) 
   {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
@@ -167,12 +170,16 @@ export class Tab2Page {
   }
   
   //wE CALL THIS FROM EACH ITEM.
-  SelectSearchResult(item) {
+  async SelectSearchResult(item) {
     ///WE CAN CONFIGURE MORE COMPLEX FUNCTIONS SUCH AS UPLOAD DATA TO FIRESTORE OR LINK IT TO SOMETHING
-    
     let address = item.description;
+
+    this.pickUpLocation = address;
+    
     var geocoder = new google.maps.Geocoder();
-  
+    
+    let latitude = null;
+    let longitude = null;
     geocoder.geocode( { 'address': address}, function(results, status) {
 
       if (status == google.maps.GeocoderStatus.OK) {
@@ -200,39 +207,40 @@ export class Tab2Page {
         }
         
     });
+    
+    await this.convertAddressToLatLong(address);
+
+    // update maps service so you can use the data in other pages
+    
+    this.mapsService.updatePickUpLocation(this.latitude, this.longitude, this.pickUpLocation);
+    console.log(this.latitude, this.longitude, this.pickUpLocation);
+
+    console.log(this.mapsService.getPickUpLocation());
 
   }
 
-  changePointer(lat, long){
-  // Dito yung taas
-  let latLng = new google.maps.LatLng(lat, long);
-    let mapOptions = {
-      center: latLng,
-      zoom: 17,
-      disableDefaultUI: true,
-      restriction: {
-        latLngBounds: {
-          north: 17.6867129,
-          south: 17.5174437,
-          east: 121.8369136,
-          west: 121.6820089,
-        },
-      },
-      // mapTypeId: google.maps.MapTypeId.ROADMAP
-    } 
-    latLng = new google.maps.Map(document.getElementById('map'), mapOptions);
+   async convertAddressToLatLong(address){
 
-    //LOAD THE MAP WITH THE PREVIOUS VALUES AS PARAMETERS.
-    this.getAddressFromCoords(lat, long); 
-    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions); 
-    this.map.addListener('tilesloaded', () => {
-      console.log('accuracy',this.map, this.map.center.lat());
-      this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
-      this.lat = this.map.center.lat()
-      this.long = this.map.center.lng()
+    var geocoder = new google.maps.Geocoder();
+
+    return new Promise(resolve => {
+      geocoder.geocode( { 'address': address}, (results, status) => {
+
+        if (status == google.maps.GeocoderStatus.OK) {
+            const lat = results[0].geometry.location.lat();
+            const long = results[0].geometry.location.lng();
+  
+            this.latitude = lat;
+            this.longitude = long;
+
+            if (this.latitude != null && this.longitude != null) {
+              resolve('Ok');
+            }
+          }
+      });
     });
   }
-  
+
 
   //lET'S BE CLEAN! THIS WILL JUST CLEAN THE LIST WHEN WE CLOSE THE SEARCH BAR.
   ClearAutocomplete(){
