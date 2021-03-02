@@ -39,7 +39,6 @@ export class Tab2Page {
         private geolocation: Geolocation,
         private nativeGeocoder: NativeGeocoder,    
         public zone: NgZone,
-
   ) 
   {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
@@ -56,16 +55,26 @@ export class Tab2Page {
   loadMap() {
     
     //FIRST GET THE LOCATION FROM THE DEVICE.
+    
     this.geolocation.getCurrentPosition().then((resp) => {
+      // 17.6578, 121.7083
       let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
       let mapOptions = {
-        componentRestrictions: { country: "ph", },
         center: latLng,
         zoom: 17,
         disableDefaultUI: true,
+        restriction: {
+          latLngBounds: {
+            north: 17.6867129,
+            south: 17.5174437,
+            east: 121.8369136,
+            west: 121.6820089,
+          },
+        },
         // mapTypeId: google.maps.MapTypeId.ROADMAP
       } 
-      
+      latLng = new google.maps.Map(document.getElementById('map'), mapOptions);
+
       //LOAD THE MAP WITH THE PREVIOUS VALUES AS PARAMETERS.
       this.getAddressFromCoords(resp.coords.latitude, resp.coords.longitude); 
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions); 
@@ -118,19 +127,26 @@ export class Tab2Page {
       return;
     }
 
-    // set default bounds 
-    var defaultBounds = new google.maps.LatLngBounds(
-              new google.maps.LatLng(17.61306, 121.72694),
-              new google.maps.LatLng(364930.52061419, 364930.52061419));
+    const defaultBounds = {
+      north: 17.6867129,
+      south: 17.5174437,
+      east: 121.8369136,
+      west: 121.6820089,
+    };
+
+    let request = {
+      input: this.autocomplete.input,
+      bounds:defaultBounds,
+      componentRestrictions: {counter: "ph"},
+    }
     
-    this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input },
-
-      // set bias as second parameter
-    // { bounds: defaultBounds, strictBounds: true },
-
+    this.GoogleAutocomplete.getPlacePredictions(request ,
     (predictions, status) => {
+      
+      
       this.autocompleteItems = [];
       this.zone.run(() => {
+        
         predictions.forEach((prediction) => {
           this.autocompleteItems.push(prediction);
         });

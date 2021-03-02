@@ -20,11 +20,11 @@ export class TravelCostPage implements OnInit {
 
   ngOnInit() 
   {
-    const usersInfo = JSON.parse(localStorage.getItem('userInfo'));
-    this.userInfo = usersInfo;
+    // const usersInfo = JSON.parse(localStorage.getItem('userInfo'));
+    // this.userInfo = usersInfo;
     
-    // assign his full name
-    this.fullName = usersInfo.fullName; 
+    // // assign his full name
+    // this.fullName = usersInfo.fullName; 
   }
   
   proceed(){
@@ -40,7 +40,7 @@ export class TravelCostPage implements OnInit {
       "distance": "5",
       "price": "100",
       "status": "finding",
-      "fullName": this.fullName,
+      // "fullName": this.fullName,
       "mobile_number": "Hehe",
     }
 
