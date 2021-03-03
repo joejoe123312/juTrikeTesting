@@ -281,6 +281,10 @@ export class Tab2Page {
     return await modal.present();
   }
   
+  funct(){
+    alert('hehe');
+  }
+  
   
 }
 

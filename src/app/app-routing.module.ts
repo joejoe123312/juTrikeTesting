@@ -50,6 +50,10 @@ const routes: Routes = [
   loadChildren: () => import('./view-qrcode/view-qrcode.module').then( m => m.ViewQRCodePageModule)
   },
   {
+    path: 'splash-screen',
+    loadChildren: () => import('./splash-screen/splash-screen.module').then( m => m.SplashScreenPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
   },
@@ -60,8 +64,7 @@ const routes: Routes = [
   {
     path: 'drop-of-location',
     loadChildren: () => import('./modals/drop-of-location/drop-of-location.module').then( m => m.DropOfLocationPageModule)
-  }
-
+  },
 
 ];
 @NgModule({
