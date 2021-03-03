@@ -3,26 +3,6 @@
     <ion-icon name="close-outline" slot="end" class="close"></ion-icon>
   </ion-toolbar>
 </ion-header>
-
-<ion-card>
-  <ion-card-content>
-    <ion-item (click)="launchPickUpModal()">
-      <ion-icon name="location-outline" slot="start"></ion-icon>
-      <ion-label>
-        <b>San jose village</b><br>
-        <p>Click to enter pick up address</p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="navigate-outline" slot="start"></ion-icon>
-      <ion-label>
-        <b>Robinsons galeria</b><br>
-        <p>Click to enter drop off address</p>
-      </ion-label>
-    </ion-item>
-  </ion-card-content>
-</ion-card>
-
 <ion-content class="ion-padding">
 
   <ion-label class="ion-text-center">
@@ -59,6 +39,10 @@
     </div>
     <div #map id="map" style="height: 100%;"></div>
   </div>
-  <br><br>
-  <ion-button shape="block" [routerLink]="['/travel-cost']">Book Now</ion-button>
+  <ion-col size="6">
+  </ion-col>
+  <ion-col size="6">
+    <ion-button shape="block" onclick="alert('Lagay mo na po yung confirmation dito master')" >Confirm</ion-button>
+  </ion-col>
+
 </ion-content>
