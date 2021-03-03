@@ -12,6 +12,11 @@ import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@io
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { MapsService } from '../services/maps.service';
 
+// for launching of modals
+import { ModalController } from '@ionic/angular';
+import { PickUpLocationPage } from '../modals/pick-up-location/pick-up-location.page';
+
+
 declare var google: any;
 
 @Component({
@@ -48,6 +53,9 @@ export class Tab2Page {
         public zone: NgZone,
         
         public mapsService: MapsService,
+
+        // for launching modals
+        public modalController: ModalController,
   ) 
   {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
@@ -217,6 +225,8 @@ export class Tab2Page {
 
     console.log(this.mapsService.getPickUpLocation());
 
+    
+
   }
 
    async convertAddressToLatLong(address){
@@ -252,6 +262,16 @@ export class Tab2Page {
   GoTo(){
     return window.location.href = 'https://www.google.com/maps/search/?api=1&query=Google&query_place_id='+this.placeid;
   }
+
+  async launchPickUpModal(){
+
+    const modal = await this.modalController.create({
+      component: PickUpLocationPage,
+    });
+    
+    return await modal.present();
+  }
+  
   
 }
 

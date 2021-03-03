@@ -52,6 +52,10 @@ const routes: Routes = [
   {
     path: '**',
     loadChildren: () => import('./page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
+  },
+  {
+    path: 'pick-up-location',
+    loadChildren: () => import('./modals/pick-up-location/pick-up-location.module').then( m => m.PickUpLocationPageModule)
   }
 
 
