@@ -1,28 +1,26 @@
 <ion-header class="Curve" [translucent]="true">
-    <ion-toolbar class="color" color="primary">  
-      <h1><strong>JuTrike!</strong></h1>   
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-content>
-    <ion-card>
-      <ion-card-content>
-        <ion-item (click)="launchPickUpModal()">
-          <ion-icon name="location-outline" slot="start"></ion-icon>
-          <ion-label>
-            <b>San jose village</b><br>
-            <p>Click to enter pick up address</p>
-          </ion-label>
-        </ion-item>
-        <ion-item (click)="launchDropOffModal()">
-          <ion-icon name="navigate-outline" slot="start"></ion-icon>
-          <ion-label>
-            <b>Robinsons galeria</b><br>
-            <p>Click to enter drop off address</p>
-          </ion-label>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-  </ion-content>
+  <ion-toolbar class="color" color="primary">
+    <h1><strong>JuTrike!</strong></h1>
+  </ion-toolbar>
+</ion-header>
 
-  
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-item (click)="launchPickUpModal()">
+        <ion-icon name="location-outline" slot="start"></ion-icon>
+        <ion-label>
+          <b>San jose village</b><br>
+          <p>Click to enter pick up address</p>
+        </ion-label>
+      </ion-item>
+      <ion-item (click)="launchDropOffModal()">
+        <ion-icon name="navigate-outline" slot="start"></ion-icon>
+        <ion-label>
+          <b>Robinsons galeria</b><br>
+          <p>Click to enter drop off address</p>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
