@@ -13,6 +13,7 @@ import { ViewChild , ElementRef } from '@angular/core';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { MapsService } from '../../services/maps.service';
+
 declare var google: any;
 
 @Component({
@@ -259,13 +260,6 @@ export class DropOfLocationPage implements OnInit {
     return window.location.href = 'https://www.google.com/maps/search/?api=1&query=Google&query_place_id='+this.placeid;
   }
 
-  async launchPickUpModal(){
 
-    const modal = await this.modalController.create({
-      component: PickUpLocationPage,
-    });
-    
-    return await modal.present();
-  }
 
 }
