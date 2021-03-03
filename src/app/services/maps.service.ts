@@ -21,7 +21,6 @@ export class MapsService {
       longitude: longitude,
       location: location
     }
-
     this.pickUpLocation = appendObj;
   }
 
