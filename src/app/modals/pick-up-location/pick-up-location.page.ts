@@ -258,7 +258,6 @@ export class PickUpLocationPage implements OnInit {
     this.autocompleteItems = []
     this.autocomplete.input = ''
   }
- 
   //sIMPLE EXAMPLE TO OPEN AN URL WITH THE PLACEID AS PARAMETER.
   GoTo(){
     return window.location.href = 'https://www.google.com/maps/search/?api=1&query=Google&query_place_id='+this.placeid;
