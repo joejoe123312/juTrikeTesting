@@ -23,5 +23,16 @@
       </ion-item>
     </ion-card-content>
   </ion-card>
+
+<ion-content class="ion-padding">
+  <div class="map-wrapper" style="height: 40%;">
+    <div id="map_center">
+    <ion-icon name="pin" size="large" color="danger"></ion-icon>
+    </div>
+    <div #map id="map" style="height: 100%;"></div>
+    </div>
+    <br><br>
+    <ion-button shape="block" [routerLink]="['/travel-cost']">Book Now</ion-button>
+</ion-content>
 </ion-content>
 <!-- Heto yung nag babago -->
