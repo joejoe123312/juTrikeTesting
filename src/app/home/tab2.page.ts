@@ -72,9 +72,7 @@ export class Tab2Page {
 
   //LOADING THE MAP HAS 2 PARTS.
   loadMap() {
-    
     //FIRST GET THE LOCATION FROM THE DEVICE.
-    
     this.geolocation.getCurrentPosition().then((resp) => {
       // 17.6578, 121.7083
       let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
