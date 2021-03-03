@@ -15,6 +15,7 @@ import { MapsService } from '../services/maps.service';
 // for launching of modals
 import { ModalController } from '@ionic/angular';
 import { PickUpLocationPage } from '../modals/pick-up-location/pick-up-location.page';
+import { DropOfLocationPage } from '../modals/drop-of-location/drop-of-location.page';
 
 
 declare var google: any;
@@ -269,6 +270,16 @@ export class Tab2Page {
       component: PickUpLocationPage,
     });
     
+    return await modal.present();
+  }
+
+  async launchDropOffModal(){
+
+    // DropOfLocationPage
+    const modal = await this.modalController.create({
+      component: DropOfLocationPage,
+    });
+
     return await modal.present();
   }
   

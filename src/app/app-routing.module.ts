@@ -56,6 +56,10 @@ const routes: Routes = [
   {
     path: 'pick-up-location',
     loadChildren: () => import('./modals/pick-up-location/pick-up-location.module').then( m => m.PickUpLocationPageModule)
+  },
+  {
+    path: 'drop-of-location',
+    loadChildren: () => import('./modals/drop-of-location/drop-of-location.module').then( m => m.DropOfLocationPageModule)
   }
 
 
