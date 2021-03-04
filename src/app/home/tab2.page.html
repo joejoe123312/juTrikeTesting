@@ -27,10 +27,16 @@
 <ion-content class="ion-padding">
   <div class="map-wrapper" style="height: 40%;">
     <div id="map_center">
-    <ion-icon name="pin" size="large" color="danger"></ion-icon>
+    <!-- <ion-icon name="pin" size="large" color="danger"></ion-icon> -->
     </div>
+    <div id="floating-panel"></div>
+    
+    <!-- <div id="right-panel" style=""></div> -->
     <div #map id="map" style="height: 100%;"></div>
-    </div>
+    
+  </div>
+  <div id="distance"></div>
+  <div id="duration"></div>
     <br><br>
     <ion-button shape="block" [routerLink]="['/travel-cost']">Book Now</ion-button>
 </ion-content>
