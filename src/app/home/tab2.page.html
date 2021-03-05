@@ -28,23 +28,27 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- <div *ngIf="mapShow"> -->
-    <ion-content class="ion-padding">
-        <div class="map-wrapper" style="height: 40%;">
-          <div id="map_center">
-            <!-- <ion-icon name="pin" size="large" color="danger"></ion-icon> -->
-          </div>
-          <div id="floating-panel"></div>
-        
-          <!-- <div id="right-panel" style=""></div> -->
-          <div #map id="homeMap" style="height: 100%;"></div>
-        
-        </div>
-        <div id="distance"></div>
-        <div id="duration"></div>
-        <br><br>
-        <ion-button shape="block" [routerLink]="['/travel-cost']" *ngIf="mapShow">Book Now</ion-button>
-    </ion-content>
-  <!-- </div> -->
+<ion-content class="ion-padding">
+  <div class="map-wrapper" style="height: 70%;">
+    <div id="map_center">
+    <!-- <ion-icon name="pin" size="large" color="danger"></ion-icon> -->
+    </div>
+    <div id="floating-panel"></div>
+    
+    <!-- <div id="right-panel" style=""></div> -->
+    <div #map id="map" style="height: 100%;"></div>
+    
+  </div>
+  
 </ion-content>
+</ion-content>
+<ion-card class="cards-main">
+  <ion-card-content class="">
+    <div class="">
+      <ion-label><strong>Distance : </strong><span id="distance"></span></ion-label>
+      <ion-label><strong>Travel Time :</strong> <span id="duration"></span></ion-label>
+      <ion-button shape="block" [routerLink]="['/travel-cost']">Book Now</ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>   
 <!-- Heto yung nag babago -->

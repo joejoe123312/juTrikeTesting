@@ -24,9 +24,9 @@ ion-card.cards-main {
   margin-top: -20px;
   background-color: lightsteelblue;
   border-radius: 20px;
-  position: sticky;
   height: auto;
-  z-index: 0;
+  width: auto;
+  z-index: 1;
 }
 
 ion-img.image-default {
