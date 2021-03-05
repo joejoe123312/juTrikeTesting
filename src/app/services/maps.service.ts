@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
+
 declare var google: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapsService {
+
   pickUpLocation: any = {
     latitude: null,
     longitude: null,
@@ -16,6 +18,10 @@ export class MapsService {
     location: null,
   };
   mapShow:boolean = true;
+  
+  // for current location
+  currentLocLat: number;
+  currentLocLong: number;
   
 
   constructor() { }
@@ -63,7 +69,6 @@ export class MapsService {
     return this.dropOfLocation.location;
   }
 
-
-
+  
   
 }

@@ -57,26 +57,39 @@ export class PickUpLocationPage implements OnInit {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
-    const geocoder = new google.maps.Geocoder();
-    this.loadMap();    
-
+    const geocoder = new google.maps.Geocoder(); 
    }
 
-  ngOnInit() {
-     console.table(this.navParams);
-    this.modelId = this.navParams.data.paramID;
-    this.modalTitle = this.navParams.data.paramTitle;
+  async ngOnInit() {
+    await this.loadMap();
+    await this.setCurrentLocation();
   }
 
    async closeModal() {
-    const onClosedData: string = "Wrapped Up!";
-    await this.modalController.dismiss(onClosedData);
+    await this.modalController.dismiss();
   }
+
+  setCurrentLocation(){
+    return new Promise(resolve => {
+      this.geolocation.getCurrentPosition().then(resp => {
+        this.latitude = resp.coords.latitude;
+        this.longitude = resp.coords.longitude;
+
+        if (this.latitude != null) {
+          console.log(this.latitude, this.longitude);
+          resolve('Done');
+        }
+      });
+    });  
+  }
+
    //LOADING THE MAP HAS 2 PARTS.
-   loadMap() {
+   async loadMap() {
     //FIRST GET THE LOCATION FROM THE DEVICE.
-    this.geolocation.getCurrentPosition().then((resp) => {
+    await this.geolocation.getCurrentPosition().then((resp) => {
       // 17.6578, 121.7083
+      
+
       let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
       let mapOptions = {
         center: latLng,
@@ -263,6 +276,10 @@ export class PickUpLocationPage implements OnInit {
     return window.location.href = 'https://www.google.com/maps/search/?api=1&query=Google&query_place_id='+this.placeid;
   }
 
-
+  async confirmLocation(){
+    await this.setCurrentLocation();
+    
+    await this.mapsService.updatePickUpLocation(this.latitude, this.longitude, this.pickUpLocation);
+  }
 
 }
