@@ -276,10 +276,46 @@ export class PickUpLocationPage implements OnInit {
     return window.location.href = 'https://www.google.com/maps/search/?api=1&query=Google&query_place_id='+this.placeid;
   }
 
+  convertLatLongToAddress(lattitude, longitude) {
+    return new Promise(resolve => {
+      let options: NativeGeocoderOptions = {
+      useLocale: true,
+      maxResults: 5    
+    }; 
+    this.nativeGeocoder.reverseGeocode(lattitude, longitude, options)
+      .then((result: NativeGeocoderResult[]) => {
+         var address = "";
+        let responseAddress = [];
+        for (let [key, value] of Object.entries(result[0])) {
+          if(value.length>0)
+          responseAddress.push(value); 
+        }
+        responseAddress.reverse();
+        for (let value of responseAddress) {
+          address += value+", ";
+        }
+        address = this.address.slice(0, -2);
+        if (address != null) {
+          resolve(address);
+        }
+      })
+      .catch((error: any) =>{ 
+        this.address = "Address Not Available!";
+      });
+    }); 
+  }
+
   async confirmLocation(){
     await this.setCurrentLocation();
     
-    await this.mapsService.updatePickUpLocation(this.latitude, this.longitude, this.pickUpLocation);
+    await this.convertLatLongToAddress(this.latitude, this.longitude).then(address => {
+      
+      this.mapsService.updatePickUpLocation(this.latitude, this.longitude, address);
+
+    });
+    
+    await console.log(this.mapsService.getPickUpLocation(), 'ako si pick up location');
+
   }
 
 }

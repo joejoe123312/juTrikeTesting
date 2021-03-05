@@ -250,6 +250,8 @@ getDurationAndDistanec() {
         var endLat = dropOffLocation.latitude;
         var endLng = dropOffLocation.longitude;
         this.loadMap(startLat, startLng, endLat, endLng);
+
+        this.readyForBooking = true;
       }
 
     });
