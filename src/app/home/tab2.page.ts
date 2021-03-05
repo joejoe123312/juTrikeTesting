@@ -82,14 +82,12 @@ export class Tab2Page {
         west: 121.6820089,
       },
     },
-   
   });
   directionsRenderer.setMap(map);
   directionsRenderer.setPanel(document.getElementById("right-panel"));
   const control = document.getElementById("floating-panel");
   control.style.display = "block";
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
-
 /*   const onChangeHandler = function () {
     calculateAndDisplayRoute(directionsService, directionsRenderer);
   };
@@ -133,6 +131,7 @@ getDurationAndDistanec() {
       unitSystem: google.maps.UnitSystem.METRIC,
       avoidHighways: false,
       avoidTolls: false,
+      
     },
     (response, status) => {
       if (status !== "OK") {
