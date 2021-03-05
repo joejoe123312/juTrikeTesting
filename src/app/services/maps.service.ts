@@ -15,7 +15,7 @@ export class MapsService {
     longitude: null,
     location: null,
   };
-  mapShow:boolean = false;
+  mapShow:boolean = true;
   
 
   constructor() { }
@@ -24,8 +24,16 @@ export class MapsService {
     return this.mapShow;
   }
 
+  showMapPointAToB(){
+    this.mapShow = true;
+  }
+
   getPickUpLocation(){
     return this.pickUpLocation;
+  }
+
+  getDropOffLocation(){
+    return this.dropOfLocation;
   }
 
   updatePickUpLocation(latitude, longitude, location){
@@ -48,12 +56,10 @@ export class MapsService {
   }
 
   getPickUpAddress(){
-    console.log(this.pickUpLocation.location);
     return this.pickUpLocation.location;
   }
 
   getDropOffAddress(){
-    console.log(this.pickUpLocation.location);
     return this.dropOfLocation.location;
   }
 

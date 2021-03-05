@@ -214,14 +214,16 @@ export class DropOfLocationPage implements OnInit {
         
     });
     
-    await this.convertAddressToLatLong(address);
+      await this.convertAddressToLatLong(address);
 
-    // update maps service so you can use the data in other pages
-    
-    this.mapsService.updatePickUpLocation(this.latitude, this.longitude, this.pickUpLocation);
-    console.log(this.latitude, this.longitude, this.pickUpLocation);
+      // update maps service so you can use the data in other pages
+      
+      await this.mapsService.updateDropOfLocation(this.latitude, this.longitude, this.pickUpLocation);
+      // console.log(this.latitude, this.longitude, this.pickUpLocation);
 
-    console.log(this.mapsService.getPickUpLocation());
+      // await console.log(this.mapsService.getDropOffAddress());
+
+      this.closeModal();
 
     
 

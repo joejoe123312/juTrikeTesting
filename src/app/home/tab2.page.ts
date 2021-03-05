@@ -48,6 +48,11 @@ export class Tab2Page {
   dropOffLongitude: any;
   dropOffLocation: any;
 
+  selectDestination: boolean;
+
+  // trigger ready for booking
+  readyForBooking: boolean = false;
+
   autocomplete: { input: string; };
   autocompleteItems: any[];
   location: any;
@@ -75,12 +80,6 @@ export class Tab2Page {
     // initiate map show default value is false
     this.mapShow = this.mapsService.getMapShowStatus();
 
-    if (this.mapShow == true) {
-      this.loadMap();    
-      this.getDurationAndDistanec();
-    }
-    
-
     // initialize pickup and dropoff address
     this.getPickUpAndDropOffAddress();
   }
@@ -88,12 +87,11 @@ export class Tab2Page {
   getPickUpAndDropOffAddress(){
     this.pickUpAddress = this.mapsService.getPickUpAddress();
     this.dropOffAddress = this.mapsService.getDropOffAddress();
-    console.log('nag run yung pickUpAndDropOffAddress');
   }
 
 
   //LOADING THE MAP HAS 2 PARTS.
-  loadMap() {
+  loadMap(startLat, startLng, endLat, endLng) {
   const directionsRenderer = new google.maps.DirectionsRenderer();
   const directionsService = new google.maps.DirectionsService();
   const map = new google.maps.Map(document.getElementById("homeMap"), {
@@ -119,12 +117,13 @@ export class Tab2Page {
   };
   document.getElementById("start").addEventListener("change", onChangeHandler);
   document.getElementById("end").addEventListener("change", onChangeHandler); */
-  this.calculateAndDisplayRoute(directionsService, directionsRenderer);
+  
+  this.calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng);
 }
  
- calculateAndDisplayRoute(directionsService, directionsRenderer) {
-  const start = {lat: 17.613236739787514, lng: 121.72725845926294};
-  const end = {lat: 17.629760901798956, lng: 121.73335336686061};
+ calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng) {
+  const start = {lat: startLat, lng: startLng};
+  const end = {lat: endLat, lng: endLng};
   directionsService.route(
     {
       origin: start,
@@ -213,6 +212,13 @@ getDurationAndDistanec() {
 
     modal.onWillDismiss().then(() => {
       this.getPickUpAndDropOffAddress();
+
+      // check if pick up location is not empty
+      const pickUpLocation = this.mapsService.getPickUpLocation();
+      if (pickUpLocation.location != null) {
+        this.selectDestination = true; 
+      }
+
     });
     
     return await modal.present();
@@ -225,6 +231,24 @@ getDurationAndDistanec() {
       component: DropOfLocationPage,
     });
 
+     modal.onWillDismiss().then(() => {
+      this.getPickUpAndDropOffAddress();
+
+      // determine if drop off location is already set
+      const dropOffLocation = this.mapsService.getDropOffLocation();
+      const pickUpLocation = this.mapsService.getPickUpLocation();
+      if (dropOffLocation.location != null) {
+
+        // get the latitude and longitude of the start and end locations
+        
+        var startLat = pickUpLocation.latitude;
+        var startLng = pickUpLocation.longitude;
+        var endLat = dropOffLocation.latitude;
+        var endLng = dropOffLocation.longitude;
+        this.loadMap(startLat, startLng, endLat, endLng);
+      }
+
+    });
 
     return await modal.present();
   }
