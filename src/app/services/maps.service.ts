@@ -7,9 +7,14 @@ declare var google: any;
 export class MapsService {
   pickUpLocation: any;
   dropOfLocation: any;
+  mapShow:boolean = true;
   
 
   constructor() { }
+
+  getMapShowStatus(){
+    return this.mapShow;
+  }
 
   getPickUpLocation(){
     return this.pickUpLocation;

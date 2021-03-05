@@ -26,7 +26,10 @@ declare var google: any;
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page {
-    @ViewChild('map',  {static: false}) mapElement: ElementRef;
+    @ViewChild('homeMap',  {static: false}) mapElement: ElementRef;
+  
+  mapShow:boolean;
+
   map: any;
   address:string;
   lat: string;
@@ -36,6 +39,10 @@ export class Tab2Page {
   latitude: any;
   longitude: any;
   pickUpLocation: string;
+
+  dropOffLatitude: any;
+  dropOffLongitude: any;
+  dropOffLocation: any;
 
   autocomplete: { input: string; };
   autocompleteItems: any[];
@@ -60,9 +67,14 @@ export class Tab2Page {
    }
 // tslint:disable-next-line: use-lifecycle-interface
   //LOAD THE MAP ONINIT.
-  ngOnInit() {
-    this.loadMap();    
-    this.getDurationAndDistanec();
+  ionViewWillEnter() {
+    // initiate map show default value is false
+    this.mapShow = this.mapsService.getMapShowStatus();
+
+    if (this.mapShow == true) {
+      this.loadMap();    
+      this.getDurationAndDistanec();
+    }
   }
 
 
@@ -70,7 +82,7 @@ export class Tab2Page {
   loadMap() {
   const directionsRenderer = new google.maps.DirectionsRenderer();
   const directionsService = new google.maps.DirectionsService();
-  const map = new google.maps.Map(document.getElementById("map"), {
+  const map = new google.maps.Map(document.getElementById("homeMap"), {
     zoom: 20,
     center: { lat: 17.613419058438215, lng:121.72716086550331 },
     disableDefaultUI: true,

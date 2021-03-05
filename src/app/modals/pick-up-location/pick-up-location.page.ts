@@ -222,11 +222,11 @@ export class PickUpLocationPage implements OnInit {
     // update maps service so you can use the data in other pages
     
     this.mapsService.updatePickUpLocation(this.latitude, this.longitude, this.pickUpLocation);
-    console.log(this.latitude, this.longitude, this.pickUpLocation);
+    // console.log(this.latitude, this.longitude, this.pickUpLocation);
 
     console.log(this.mapsService.getPickUpLocation());
 
-    
+    this.closeModal();
 
   }
 
