@@ -65,7 +65,6 @@ export class Tab2Page {
     this.getDurationAndDistanec();
   }
 
-
   //LOADING THE MAP HAS 2 PARTS.
   loadMap() {
   const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -104,11 +103,15 @@ export class Tab2Page {
       origin: start,
       destination: end,
       travelMode: google.maps.TravelMode.DRIVING,
+      drivingOptions: {
+        departureTime: new Date(Date.now()),  // for the time N milliseconds from now.
+        trafficModel: 'optimistic'
+      }
     },
     (response, status) => {
       if (status === "OK") {
         directionsRenderer.setDirections(response);
-        console.log(response);
+        // console.log(response);
       } else {
         window.alert("Directions request failed due to " + status);
       }
@@ -131,6 +134,7 @@ getDurationAndDistanec() {
       unitSystem: google.maps.UnitSystem.METRIC,
       avoidHighways: false,
       avoidTolls: false,
+      
       
     },
     (response, status) => {
