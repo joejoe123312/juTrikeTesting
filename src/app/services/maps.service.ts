@@ -5,9 +5,17 @@ declare var google: any;
   providedIn: 'root'
 })
 export class MapsService {
-  pickUpLocation: any;
-  dropOfLocation: any;
-  mapShow:boolean = true;
+  pickUpLocation: any = {
+    latitude: null,
+    longitude: null,
+    location: null,
+  };
+  dropOfLocation: any = {
+    latitude: null,
+    longitude: null,
+    location: null,
+  };
+  mapShow:boolean = false;
   
 
   constructor() { }
@@ -37,6 +45,16 @@ export class MapsService {
     }
 
     this.dropOfLocation = appendObj;
+  }
+
+  getPickUpAddress(){
+    console.log(this.pickUpLocation.location);
+    return this.pickUpLocation.location;
+  }
+
+  getDropOffAddress(){
+    console.log(this.pickUpLocation.location);
+    return this.dropOfLocation.location;
   }
 
 

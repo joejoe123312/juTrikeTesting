@@ -40,6 +40,10 @@ export class Tab2Page {
   longitude: any;
   pickUpLocation: string;
 
+  //pangalan kung nasan yung address
+  pickUpAddress: string;
+  dropOffAddress: string;   
+
   dropOffLatitude: any;
   dropOffLongitude: any;
   dropOffLocation: any;
@@ -75,6 +79,16 @@ export class Tab2Page {
       this.loadMap();    
       this.getDurationAndDistanec();
     }
+    
+
+    // initialize pickup and dropoff address
+    this.getPickUpAndDropOffAddress();
+  }
+
+  getPickUpAndDropOffAddress(){
+    this.pickUpAddress = this.mapsService.getPickUpAddress();
+    this.dropOffAddress = this.mapsService.getDropOffAddress();
+    console.log('nag run yung pickUpAndDropOffAddress');
   }
 
 
@@ -122,7 +136,7 @@ export class Tab2Page {
     (response, status) => {
       if (status === "OK") {
         directionsRenderer.setDirections(response);
-        console.log(response);
+        // console.log(response);
       } else {
         window.alert("Directions request failed due to " + status);
       }
@@ -196,6 +210,10 @@ getDurationAndDistanec() {
 
     const modal = await this.modalController.create({
       component: PickUpLocationPage,
+    }); 
+
+    modal.onWillDismiss().then(() => {
+      this.getPickUpAndDropOffAddress();
     });
     
     return await modal.present();
@@ -207,6 +225,7 @@ getDurationAndDistanec() {
     const modal = await this.modalController.create({
       component: DropOfLocationPage,
     });
+
 
     return await modal.present();
   }
