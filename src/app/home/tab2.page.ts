@@ -142,10 +142,10 @@ export class Tab2Page {
 }
 
 // Pwede mag lagaya nalang ng parameter for Start and DropOff origin.
-getDurationAndDistanec() {
+getDurationAndDistanec(startLat, startLng, endLat, endLng) {
 
-  const start = {lat: 17.613236739787514, lng: 121.72725845926294};
-  const end = {lat: 17.629760901798956, lng: 121.73335336686061};
+  const start = {lat: startLat, lng: startLng};
+  const end = {lat: endLat, lng: endLng};
   const geocoder = new google.maps.Geocoder();
   const service = new google.maps.DistanceMatrixService();
   service.getDistanceMatrix(
@@ -246,6 +246,8 @@ getDurationAndDistanec() {
         var endLat = dropOffLocation.latitude;
         var endLng = dropOffLocation.longitude;
         this.loadMap(startLat, startLng, endLat, endLng);
+
+        this.getDurationAndDistanec(startLat, startLng, endLat, endLng);
 
         this.readyForBooking = true;
       }

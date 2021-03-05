@@ -76,7 +76,6 @@ export class PickUpLocationPage implements OnInit {
         this.longitude = resp.coords.longitude;
 
         if (this.latitude != null) {
-          console.log(this.latitude, this.longitude);
           resolve('Done');
         }
       });
@@ -85,6 +84,10 @@ export class PickUpLocationPage implements OnInit {
 
    //LOADING THE MAP HAS 2 PARTS.
    async loadMap() {
+    const loading = await this.loadingCtrl.create({
+      message:'Getting your current location ...'
+    });
+    await loading.present();
     //FIRST GET THE LOCATION FROM THE DEVICE.
     await this.geolocation.getCurrentPosition().then((resp) => {
       // 17.6578, 121.7083
@@ -115,6 +118,8 @@ export class PickUpLocationPage implements OnInit {
         this.lat = this.map.center.lat()
         this.long = this.map.center.lng()
       }); 
+
+      loading.dismiss();
     }).catch((error) => {
       console.log('Error getting location', error);
     });
@@ -276,46 +281,26 @@ export class PickUpLocationPage implements OnInit {
     return window.location.href = 'https://www.google.com/maps/search/?api=1&query=Google&query_place_id='+this.placeid;
   }
 
-  convertLatLongToAddress(lattitude, longitude) {
-    return new Promise(resolve => {
-      let options: NativeGeocoderOptions = {
-      useLocale: true,
-      maxResults: 5    
-    }; 
-    this.nativeGeocoder.reverseGeocode(lattitude, longitude, options)
-      .then((result: NativeGeocoderResult[]) => {
-         var address = "";
-        let responseAddress = [];
-        for (let [key, value] of Object.entries(result[0])) {
-          if(value.length>0)
-          responseAddress.push(value); 
-        }
-        responseAddress.reverse();
-        for (let value of responseAddress) {
-          address += value+", ";
-        }
-        address = this.address.slice(0, -2);
-        if (address != null) {
-          resolve(address);
-        }
-      })
-      .catch((error: any) =>{ 
-        this.address = "Address Not Available!";
-      });
-    }); 
-  }
-
   async confirmLocation(){
+    const loading =  await this.loadingCtrl.create({
+      message: "Pinning your address"
+    });
+
+    await loading.present();
     await this.setCurrentLocation();
     
-    await this.convertLatLongToAddress(this.latitude, this.longitude).then(address => {
-      
-      this.mapsService.updatePickUpLocation(this.latitude, this.longitude, address);
+    // get the location address name 
+    await this.getAddressFromCoords(this.latitude, this.longitude);
 
-    });
+    if (this.address == 'Address Not Available!') {
+      this.address = 'Pinned successfully';
+    }
+
+    await this.mapsService.updatePickUpLocation(this.latitude, this.longitude, this.address);
     
-    await console.log(this.mapsService.getPickUpLocation(), 'ako si pick up location');
+    await loading.dismiss();
 
+    this.closeModal();
   }
 
 }

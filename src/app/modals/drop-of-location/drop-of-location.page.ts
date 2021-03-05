@@ -58,51 +58,17 @@ export class DropOfLocationPage implements OnInit {
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
     const geocoder = new google.maps.Geocoder();
-    this.loadMap();   
-   }
-
+  }
+  
   ngOnInit() {
     
   }
 
   async closeModal() {
-    const onClosedData: string = "Wrapped Up!";
-    await this.modalController.dismiss(onClosedData);
-  }
-  //LOADING THE MAP HAS 2 PARTS.
-  loadMap() {
-    //FIRST GET THE LOCATION FROM THE DEVICE.
-    this.geolocation.getCurrentPosition().then((resp) => {
-      // 17.6578, 121.7083
-      let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-      let mapOptions = {
-        center: latLng,
-        zoom: 17,
-        disableDefaultUI: true,
-        restriction: {
-          latLngBounds: {
-            north: 17.6867129,
-            south: 17.5174437,
-            east: 121.8369136,
-            west: 121.6820089,
-          },
-        },
-        // mapTypeId: google.maps.MapTypeId.ROADMAP
-      } 
-      latLng = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-      //LOAD THE MAP WITH THE PREVIOUS VALUES AS PARAMETERS.
-      this.getAddressFromCoords(resp.coords.latitude, resp.coords.longitude); 
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions); 
-      this.map.addListener('tilesloaded', () => {
-        this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
-        this.lat = this.map.center.lat()
-        this.long = this.map.center.lng()
-      }); 
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
+    await this.modalController.dismiss();
   }
+  
 
   
 
