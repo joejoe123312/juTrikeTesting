@@ -14,9 +14,9 @@ export class Tab1Page {
   scanQr(){
       this.data = null;
       this.barcodeScanner.scan().then(barcodeData => {
-        console.log('Barcode data', barcodeData);
+        
         this.data = barcodeData;
-        console.log('nag run naman po ako');
+        
       }).catch(err => {
         console.log('Error', err);
       });

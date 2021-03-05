@@ -58,7 +58,7 @@ export class AuthService
         else
         {
           loading.dismiss();
-          this.router.navigate(['/tabs/home']);
+          this.router.navigate(['./splash-screen']);
         }
       })
       .catch(error =>{

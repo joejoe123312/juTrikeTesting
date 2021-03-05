@@ -26,7 +26,10 @@ declare var google: any;
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page {
-    @ViewChild('map',  {static: false}) mapElement: ElementRef;
+    @ViewChild('homeMap',  {static: false}) mapElement: ElementRef;
+  
+  mapShow:boolean;
+
   map: any;
   address:string;
   lat: string;
@@ -36,6 +39,19 @@ export class Tab2Page {
   latitude: any;
   longitude: any;
   pickUpLocation: string;
+
+  //pangalan kung nasan yung address
+  pickUpAddress: string;
+  dropOffAddress: string;   
+
+  dropOffLatitude: any;
+  dropOffLongitude: any;
+  dropOffLocation: any;
+
+  selectDestination: boolean;
+
+  // trigger ready for booking
+  readyForBooking: boolean = false;
 
   autocomplete: { input: string; };
   autocompleteItems: any[];
@@ -60,16 +76,24 @@ export class Tab2Page {
    }
 // tslint:disable-next-line: use-lifecycle-interface
   //LOAD THE MAP ONINIT.
-  ngOnInit() {
-    this.loadMap();    
-    this.getDurationAndDistanec();
+  ionViewWillEnter() {
+    // initiate map show default value is false
+    this.mapShow = this.mapsService.getMapShowStatus();
+
+    // initialize pickup and dropoff address
+    this.getPickUpAndDropOffAddress();
+  }
+
+  getPickUpAndDropOffAddress(){
+    this.pickUpAddress = this.mapsService.getPickUpAddress();
+    this.dropOffAddress = this.mapsService.getDropOffAddress();
   }
 
   //LOADING THE MAP HAS 2 PARTS.
-  loadMap() {
+  loadMap(startLat, startLng, endLat, endLng) {
   const directionsRenderer = new google.maps.DirectionsRenderer();
   const directionsService = new google.maps.DirectionsService();
-  const map = new google.maps.Map(document.getElementById("map"), {
+  const map = new google.maps.Map(document.getElementById("homeMap"), {
     zoom: 20,
     center: { lat: 17.613419058438215, lng:121.72716086550331 },
     disableDefaultUI: true,
@@ -92,12 +116,13 @@ export class Tab2Page {
   };
   document.getElementById("start").addEventListener("change", onChangeHandler);
   document.getElementById("end").addEventListener("change", onChangeHandler); */
-  this.calculateAndDisplayRoute(directionsService, directionsRenderer);
+  
+  this.calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng);
 }
  
- calculateAndDisplayRoute(directionsService, directionsRenderer) {
-  const start = {lat: 17.613236739787514, lng: 121.72725845926294};
-  const end = {lat: 17.629760901798956, lng: 121.73335336686061};
+ calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng) {
+  const start = {lat: startLat, lng: startLng};
+  const end = {lat: endLat, lng: endLng};
   directionsService.route(
     {
       origin: start,
@@ -187,6 +212,17 @@ getDurationAndDistanec() {
 
     const modal = await this.modalController.create({
       component: PickUpLocationPage,
+    }); 
+
+    modal.onWillDismiss().then(() => {
+      this.getPickUpAndDropOffAddress();
+
+      // check if pick up location is not empty
+      const pickUpLocation = this.mapsService.getPickUpLocation();
+      if (pickUpLocation.location != null) {
+        this.selectDestination = true; 
+      }
+
     });
     
     return await modal.present();
@@ -197,6 +233,25 @@ getDurationAndDistanec() {
     // DropOfLocationPage
     const modal = await this.modalController.create({
       component: DropOfLocationPage,
+    });
+
+     modal.onWillDismiss().then(() => {
+      this.getPickUpAndDropOffAddress();
+
+      // determine if drop off location is already set
+      const dropOffLocation = this.mapsService.getDropOffLocation();
+      const pickUpLocation = this.mapsService.getPickUpLocation();
+      if (dropOffLocation.location != null) {
+
+        // get the latitude and longitude of the start and end locations
+        
+        var startLat = pickUpLocation.latitude;
+        var startLng = pickUpLocation.longitude;
+        var endLat = dropOffLocation.latitude;
+        var endLng = dropOffLocation.longitude;
+        this.loadMap(startLat, startLng, endLat, endLng);
+      }
+
     });
 
     return await modal.present();

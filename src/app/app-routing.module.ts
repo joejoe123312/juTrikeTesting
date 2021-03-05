@@ -19,39 +19,50 @@ const routes: Routes = [
   },
   {
     path: 'travel-cost',
-    loadChildren: () => import('./travel-cost/travel-cost.module').then( m => m.TravelCostPageModule)
+    loadChildren: () => import('./travel-cost/travel-cost.module').then( m => m.TravelCostPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'driver-otw',
     loadChildren: () => import('./driver-otw/driver-otw.module').then( m => m.DriverOtwPageModule)
+    ,
+    canActivate: [AuthGuard]
   },
   {
     path: 'register',
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+    
   },
   {
     path: 'forgot-password',
-    loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
+    loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule),
+    canActivate: [AuthGuard]
+    
   },
   {
     path: 'change-password',
-    loadChildren: () => import('./change-password/change-password.module').then( m => m.ChangePasswordPageModule)
+    loadChildren: () => import('./change-password/change-password.module').then( m => m.ChangePasswordPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'updateCurrentUser',
-    loadChildren: () => import('./update-current-user-profile/update-current-user-profile.module').then( m => m.UpdateCurrentUserProfilePageModule)
+    loadChildren: () => import('./update-current-user-profile/update-current-user-profile.module').then( m => m.UpdateCurrentUserProfilePageModule),
+    canActivate: [AuthGuard]
   },
   {
   path: 'scan-qr',
-  loadChildren: () => import('./scan-qrcode/scan-qrcode.module').then( m => m.ScanQrcodePageModule)
+  loadChildren: () => import('./scan-qrcode/scan-qrcode.module').then( m => m.ScanQrcodePageModule),
+    canActivate: [AuthGuard]
   },
   {
   path: 'view-qr',
-  loadChildren: () => import('./view-qrcode/view-qrcode.module').then( m => m.ViewQRCodePageModule)
+  loadChildren: () => import('./view-qrcode/view-qrcode.module').then( m => m.ViewQRCodePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'splash-screen',
-    loadChildren: () => import('./splash-screen/splash-screen.module').then( m => m.SplashScreenPageModule)
+    loadChildren: () => import('./splash-screen/splash-screen.module').then( m => m.SplashScreenPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: '**',
@@ -59,11 +70,13 @@ const routes: Routes = [
   },
   {
     path: 'pick-up-location',
-    loadChildren: () => import('./modals/pick-up-location/pick-up-location.module').then( m => m.PickUpLocationPageModule)
+    loadChildren: () => import('./modals/pick-up-location/pick-up-location.module').then( m => m.PickUpLocationPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'drop-of-location',
-    loadChildren: () => import('./modals/drop-of-location/drop-of-location.module').then( m => m.DropOfLocationPageModule)
+    loadChildren: () => import('./modals/drop-of-location/drop-of-location.module').then( m => m.DropOfLocationPageModule),
+    canActivate: [AuthGuard]
   },
 
 ];

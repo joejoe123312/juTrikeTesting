@@ -17,6 +17,7 @@ export class UserServiceService {
     lastname: null, 
     phoneNumber: null,
     fullName: null,
+    userEmail: null,
   };
 
   constructor(
@@ -31,25 +32,27 @@ export class UserServiceService {
   {
   }
 
-ngOnInit()
-  {
-    // console.log(this.getCurrentUserInfo,'tangina mo');
-  }
 
   getCurrentUserInfo(){
-    this.auth.user$.subscribe(user => {
-      if (user)
-      {
-       this.userInfo.userId = user.userId;
-       this.userInfo.firstname = user.firstName;
-       this.userInfo.lastname = user.LastName;
-       this.userInfo.phoneNumber = user.userPhone;
-       this.userInfo.fullName = user.firstName + " " + user.LastName;
+    return new Promise((resolve, reject) => {
+      this.auth.user$.subscribe(user => {
+        
+        if (user != null) {
+          this.userInfo.userId = user.userId;
+          this.userInfo.firstname = user.firstName;
+          this.userInfo.lastname = user.LastName;
+          this.userInfo.phoneNumber = user.userPhone;
+          this.userInfo.userEmail = user.userEmail;
+          this.userInfo.fullName = user.firstName + " " + user.LastName;
+          
+          resolve('Status: OK');
+        }
 
-       return this.userInfo;
-      }
-     });
-    
+        if (user == null) {
+          reject('User has loged out');
+        }
+      });
+    });
   }
 
   viewUserInfo(){

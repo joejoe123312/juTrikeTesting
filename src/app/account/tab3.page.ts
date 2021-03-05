@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
+import { UserServiceService } from '../services/user-service.service';
 
 @Component({
   selector: 'app-tab3',
@@ -10,24 +11,21 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
-  user: any;
-  userId:any;
-  todoId:string;
+  userInfo:object;
+
   constructor(
     private actionSheetController: ActionSheetController,
     private router: Router,
     private auth: AuthService,
     private route: ActivatedRoute,
     private fauth: AngularFireAuth,
+    private userService: UserServiceService,
 
   ) {}
   // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit()
   {
-    this.auth.user$.subscribe(user => {
-      this.user = user;
-    });
-      
+    this.userInfo = this.userService.viewUserInfo();
   }
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
