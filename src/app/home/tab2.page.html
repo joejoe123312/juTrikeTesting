@@ -48,7 +48,7 @@
     <div class="">
       <ion-label><strong>Distance : </strong><span id="distance"></span></ion-label>
       <ion-label><strong>Travel Time :</strong> <span id="duration"></span></ion-label>
-      <ion-button shape="block" [routerLink]="['/travel-cost']">Book Now</ion-button>
+      <ion-button shape="block" (click)="bookNow()">Book Now</ion-button>
     </div>
   </ion-card-content>
 </ion-card>   

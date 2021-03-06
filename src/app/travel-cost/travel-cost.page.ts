@@ -12,7 +12,15 @@ import { UserServiceService } from '../services/user-service.service';
 export class TravelCostPage implements OnInit {
   userInfo:object;
   fullName:string;
+  
   pickUpLocation: any;
+  dropOfLocation: any
+  pickUpAddress:string;
+  dropOffAddress: string;
+
+  distance:any;
+  duration:any;
+  
 
   constructor(
     private fauth : AuthService,
@@ -21,11 +29,38 @@ export class TravelCostPage implements OnInit {
     private mapsService: MapsService,
   ) { }
 
-  ngOnInit() 
+  async ionViewWillEnter() 
   {
     this.pickUpLocation = this.mapsService.getPickUpLocation();
-    console.log(this.pickUpLocation);
+    this.dropOfLocation = this.mapsService.getDropOffLocation();
+
+    await this.processPickUpLocation();
+    this.pickUpAddress = this.pickUpLocation.location;
+    this.dropOffAddress = this.dropOfLocation.location;
+
+    const timeAndDistance = this.mapsService.getDistanceAndEstimatedTime();
+    this.distance = timeAndDistance.distance;
+    this.duration = timeAndDistance.estimatedTime;
   }
+
+  ngOnInit(){
+
+  }
+
+  processPickUpLocation(){
+    if (this.pickUpLocation.location == "Pinned successfully") {
+      let pickUpLocation = {...this.pickUpLocation};
+
+      let replaceObj = {
+        latitude: pickUpLocation.latitude,
+        longitude: pickUpLocation.longitude,
+        location: "Your Current Location",
+      };
+      
+      this.pickUpLocation = replaceObj;
+    }
+  }
+
   proceed(){
     // configure object
     let objectSet = {

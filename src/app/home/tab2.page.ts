@@ -53,6 +53,9 @@ export class Tab2Page {
   // trigger ready for booking
   readyForBooking: boolean = false;
 
+  distance: any;
+  duration: any;
+
   autocomplete: { input: string; };
   autocompleteItems: any[];
   location: any;
@@ -187,6 +190,8 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
             distance.innerHTML +=
               results[j].distance.text +
               "<br>";
+
+              this.distance = results[j].distance.text;
           }
           for (let j = 0; j < results.length; j++) {
             geocoder.geocode(
@@ -195,7 +200,9 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
             );
             duration.innerHTML +=
 
-              results[j].duration.text 
+              results[j].duration.text ;
+
+              this.duration = results[j].duration.text;
             }
         }
       }
@@ -255,6 +262,12 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
     });
 
     return await modal.present();
+  }
+
+  bookNow(){
+    this.mapsService.updateDistanceAndEstimatedTime(this.distance, this.duration);
+
+    this.router.navigate(['./travel-cost']);
   }
   
 }

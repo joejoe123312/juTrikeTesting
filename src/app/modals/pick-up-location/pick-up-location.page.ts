@@ -287,10 +287,20 @@ export class PickUpLocationPage implements OnInit {
     });
 
     await loading.present();
-    await this.setCurrentLocation();
+    
+    // check if location is already set 
+    if (this.latitude == null) {
+      await this.setCurrentLocation();
+    }
     
     // get the location address name 
-    await this.getAddressFromCoords(this.latitude, this.longitude);
+    this.getAddressFromCoords(this.latitude, this.longitude);
+    
+
+    if (this.address == null) {
+      alert('Slow internet connection detected please try again');
+      return;
+    }
 
     if (this.address == 'Address Not Available!') {
       this.address = 'Pinned successfully';
