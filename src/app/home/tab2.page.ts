@@ -53,6 +53,9 @@ export class Tab2Page {
   // trigger ready for booking
   readyForBooking: boolean = false;
 
+  distance: any;
+  duration: any;
+
   autocomplete: { input: string; };
   autocompleteItems: any[];
   location: any;
@@ -145,10 +148,10 @@ export class Tab2Page {
 }
 
 // Pwede mag lagaya nalang ng parameter for Start and DropOff origin.
-getDurationAndDistanec() {
+getDurationAndDistanec(startLat, startLng, endLat, endLng) {
 
-  const start = {lat: 17.613236739787514, lng: 121.72725845926294};
-  const end = {lat: 17.629760901798956, lng: 121.73335336686061};
+  const start = {lat: startLat, lng: startLng};
+  const end = {lat: endLat, lng: endLng};
   const geocoder = new google.maps.Geocoder();
   const service = new google.maps.DistanceMatrixService();
   service.getDistanceMatrix(
@@ -191,6 +194,8 @@ getDurationAndDistanec() {
             distance.innerHTML +=
               results[j].distance.text +
               "<br>";
+
+              this.distance = results[j].distance.text;
           }
           for (let j = 0; j < results.length; j++) {
             geocoder.geocode(
@@ -199,7 +204,9 @@ getDurationAndDistanec() {
             );
             duration.innerHTML +=
 
-              results[j].duration.text 
+              results[j].duration.text ;
+
+              this.duration = results[j].duration.text;
             }
         }
       }
@@ -251,12 +258,20 @@ getDurationAndDistanec() {
         var endLng = dropOffLocation.longitude;
         this.loadMap(startLat, startLng, endLat, endLng);
 
+        this.getDurationAndDistanec(startLat, startLng, endLat, endLng);
+
         this.readyForBooking = true;
       }
 
     });
 
     return await modal.present();
+  }
+
+  bookNow(){
+    this.mapsService.updateDistanceAndEstimatedTime(this.distance, this.duration);
+
+    this.router.navigate(['./travel-cost']);
   }
   
 }

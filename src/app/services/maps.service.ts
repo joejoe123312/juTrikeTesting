@@ -22,9 +22,24 @@ export class MapsService {
   // for current location
   currentLocLat: number;
   currentLocLong: number;
+
+  distance: number;
+  estimatedTime: number;
   
 
   constructor() { }
+
+  getDistanceAndEstimatedTime(){
+    return {
+      distance: this.distance,
+      estimatedTime: this.estimatedTime,
+    };
+  }
+
+  updateDistanceAndEstimatedTime(distance:number, estimatedTime:number){
+    this.distance = distance;
+    this.estimatedTime = estimatedTime;
+  }
 
   getMapShowStatus(){
     return this.mapShow;
