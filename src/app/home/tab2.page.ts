@@ -111,10 +111,11 @@ export class Tab2Page {
     },
   });
   directionsRenderer.setMap(map);
-  directionsRenderer.setPanel(document.getElementById("right-panel"));
-  const control = document.getElementById("floating-panel");
-  control.style.display = "block";
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
+  // directionsRenderer.setPanel(document.getElementById("right-panel"));
+  // const control = document.getElementById("floating-panel");
+  // control.style.display = "block";
+  // console.log(control.style.display);
+  // map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
 /*   const onChangeHandler = function () {
     calculateAndDisplayRoute(directionsService, directionsRenderer);
   };

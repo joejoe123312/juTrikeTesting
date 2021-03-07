@@ -149,6 +149,7 @@ export class PickUpLocationPage implements OnInit {
       })
       .catch((error: any) =>{ 
         this.address = "Address Not Available!";
+        console.log(error  + 'this is my error hehe');
       }); 
   }
 

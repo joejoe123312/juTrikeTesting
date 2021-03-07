@@ -41,10 +41,15 @@ export class TravelCostPage implements OnInit {
     const timeAndDistance = this.mapsService.getDistanceAndEstimatedTime();
     this.distance = timeAndDistance.distance;
     this.duration = timeAndDistance.estimatedTime;
+
+    console.log(this.pickUpLocation);
+    console.log(this.dropOfLocation);
+    console.log(this.distance);
+    console.log(this.duration);
   }
 
   ngOnInit(){
-
+    
   }
 
   processPickUpLocation(){
@@ -62,18 +67,31 @@ export class TravelCostPage implements OnInit {
   }
 
   proceed(){
+    const pickUpLoc = this.pickUpLocation;
+    const dropOffLoc = this.dropOfLocation;
+
+    const startLocation = pickUpLoc.location;
+    const startLat = pickUpLoc.latitude;
+    const startLong = pickUpLoc.longitude;
+
+    const endLocation = dropOffLoc.location;
+    const endLat = dropOffLoc.latitude;
+    const endLong = dropOffLoc.longitude;
+
     // configure object
     let objectSet = {
       "createdAt": Date.now(),
-      "start_location": "Testing",
-      "start_latitude": "testing",
-      "start_longitude": "Testing",
-      "end_location": "Testing",
-      "end_latitude": "Testing",
-      "end_longitude": "Testing",
-      "distance": "5",
+      "start_location": startLocation,
+      "start_latitude": startLat,
+      "start_longitude": startLong,
+      "end_location": endLocation,
+      "end_latitude": endLat,
+      "end_longitude": endLong,
+      "distance": this.distance,
       "price": "100",
       "status": "finding",
+
+      // personal information
       // "fullName": this.fullName,
       "mobile_number": "Hehe",
     }
