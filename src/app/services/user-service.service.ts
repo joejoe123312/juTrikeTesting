@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Route, Router } from '@angular/router';
+import { Plugins } from '@capacitor/core';
 import { LoadingController } from '@ionic/angular';
 import { AppAlertService } from '../services/app-alert.service';
 import { AuthService } from '../services/auth.service';
@@ -57,6 +58,34 @@ export class UserServiceService {
 
   viewUserInfo(){
     return this.userInfo;
+  }
+
+  async storeUserInfoToStorage(){
+     const { Storage } = Plugins;
+      await Storage.set({
+        key: 'userInfo',
+        value: JSON.stringify(this.userInfo),
+      });
+
+      await Storage.set({
+        key: 'user',
+        value: JSON.stringify({
+          id: 1,
+          name: 'Max'
+        })
+      });
+  }
+
+  async getStoredUserInfo(){
+    const { Storage } = Plugins;
+    const ret = await Storage.get({ key: 'userInfo' });
+    return JSON.parse(ret.value);
+  }
+
+  async getUserInfo(){
+    const { Storage } = Plugins;
+    const ret = await Storage.get({ key: 'user' });
+    return JSON.parse(ret.value);
   }
 
 }

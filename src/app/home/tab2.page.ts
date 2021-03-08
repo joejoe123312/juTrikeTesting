@@ -258,8 +258,13 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
         this.getDurationAndDistanec(startLat, startLng, endLat, endLng);
 
         this.readyForBooking = true;
+        console.clear();
       }
 
+    });
+
+    modal.onDidDismiss().then(() => {
+      console.clear();
     });
 
     return await modal.present();

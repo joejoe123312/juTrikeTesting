@@ -42,10 +42,6 @@ export class TravelCostPage implements OnInit {
     this.distance = timeAndDistance.distance;
     this.duration = timeAndDistance.estimatedTime;
 
-    console.log(this.pickUpLocation);
-    console.log(this.dropOfLocation);
-    console.log(this.distance);
-    console.log(this.duration);
   }
 
   ngOnInit(){

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { UserServiceService } from '../services/user-service.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { UserServiceService } from '../services/user-service.service';
   templateUrl: './splash-screen.page.html',
   styleUrls: ['./splash-screen.page.scss'],
 })
-export class SplashScreenPage implements OnInit {
+export class SplashScreenPage {
   userInfo = {
     userId: null,
     firstname: null,
@@ -21,15 +22,18 @@ export class SplashScreenPage implements OnInit {
     private userService: UserServiceService,
   ) { }
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
+    // const {Storage} = Plugins;
+    
     // get all of the user info and update the values in the user services 
-    await this.userService.getCurrentUserInfo().then(status => {
+    await this.userService.getCurrentUserInfo().then(status => {    
+
       this.router.navigate(['./tabs/home']);
     }).catch(message => {
       console.log(message);
     });
 
-  
+
     
   }
 
