@@ -71,7 +71,7 @@ export class CrudServiceService {
   const loading= await this.loadingCtrl.create({
     message: 'Updating Data...',
     spinner: 'crescent',
-    showBackdrop: true
+    showBackdrop: true,
   });
   loading.present();
 

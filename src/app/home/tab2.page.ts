@@ -26,7 +26,7 @@ declare var google: any;
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page {
-    @ViewChild('homeMap',  {static: false}) mapElement: ElementRef;
+    // @ViewChild('homeMap',  {static: false}) mapElement: ElementRef;
   
   mapShow:boolean;
 
@@ -223,8 +223,13 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
 
       // check if pick up location is not empty
       const pickUpLocation = this.mapsService.getPickUpLocation();
-      if (pickUpLocation.location != null) {
+      console.log(pickUpLocation, 'ako si launch pick up modal');
+      if ((pickUpLocation.latitude != null) && (pickUpLocation.longitude != null)) {
+        // may mga laman yung mga latitude at longi
         this.selectDestination = true; 
+      }else{
+        // walang laman yung lati saka longi
+        this.pickUpAddress = null;
       }
 
     });
@@ -258,19 +263,20 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
         this.getDurationAndDistanec(startLat, startLng, endLat, endLng);
 
         this.readyForBooking = true;
-        console.clear();
+        // console.clear();
       }
 
     });
 
     modal.onDidDismiss().then(() => {
-      console.clear();
+      // console.clear();
     });
 
     return await modal.present();
   }
 
   bookNow(){
+    
     this.mapsService.updateDistanceAndEstimatedTime(this.distance, this.duration);
 
     this.router.navigate(['./travel-cost']);

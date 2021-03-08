@@ -13,6 +13,7 @@ import { ViewChild , ElementRef } from '@angular/core';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { MapsService } from '../../services/maps.service';
+import { ToastController } from '@ionic/angular';
 declare var google: any;
 
 @Component({
@@ -51,7 +52,7 @@ export class PickUpLocationPage implements OnInit {
     private nativeGeocoder: NativeGeocoder,    
     public zone: NgZone,
     public mapsService: MapsService,
-    
+    public toastController: ToastController,
   ) 
   {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
@@ -146,10 +147,11 @@ export class PickUpLocationPage implements OnInit {
           this.address += value+", ";
         }
         this.address = this.address.slice(0, -2);
+        console.log('asa baba ako ni address.slice');
       })
-      .catch((error: any) =>{ 
+      .catch((error) =>{ 
         this.address = "Address Not Available!";
-        console.log(error  + 'this is my error hehe');
+        alert(error);
       }); 
   }
 
@@ -206,14 +208,12 @@ export class PickUpLocationPage implements OnInit {
     
     var geocoder = new google.maps.Geocoder();
     
-    let latitude = null;
-    let longitude = null;
-    geocoder.geocode( { 'address': address}, function(results, status) {
+    await geocoder.geocode( { 'address': address }, function(results, status) {
 
       if (status == google.maps.GeocoderStatus.OK) {
           const lat = results[0].geometry.location.lat();
           const long = results[0].geometry.location.lng();
-          
+          console.log('ako si lat: ', lat, 'ako si long: ', long);
           // CHange the pointer
           // Dito yung taas
           let latLng = new google.maps.LatLng(lat, long);
@@ -241,7 +241,7 @@ export class PickUpLocationPage implements OnInit {
     // update maps service so you can use the data in other pages
     
     this.mapsService.updatePickUpLocation(this.latitude, this.longitude, this.pickUpLocation);
-    // console.log(this.latitude, this.longitude, this.pickUpLocation);
+    console.log(this.latitude, this.longitude, this.pickUpLocation);
 
     // console.log(this.mapsService.getPickUpLocation());
 
@@ -286,32 +286,94 @@ export class PickUpLocationPage implements OnInit {
     const loading =  await this.loadingCtrl.create({
       message: "Pinning your address"
     });
-
     await loading.present();
+
+    /* kapag wala pa yung pick up location in less than N milli seconds throw an error */
+    this.validatePickUpLocation(loading, 1000);
     
     // check if location is already set 
-    if (this.latitude == null) {
-      await this.setCurrentLocation();
+    if (this.lat == null) {
+      this.setCurrentLocation();
     }
     
+
     // get the location address name 
-    this.getAddressFromCoords(this.latitude, this.longitude);
-    
-
-    if (this.address == null) {
-      alert('Slow internet connection detected please try again');
-      return;
-    }
-
+    this.getAddressFromCoords(this.lat, this.long);
+    console.log(this.address, 'ako yung pinapaconsole ni jhay');
     if (this.address == 'Address Not Available!') {
       this.address = 'Pinned successfully';
     }
 
-    await this.mapsService.updatePickUpLocation(this.latitude, this.longitude, this.address);
-    
-    await loading.dismiss();
+    this.mapsService.updatePickUpLocation(this.lat, this.long, this.address);
+    // console.log(this.lat, this.long, this.address);
 
+    loading.dismiss();
     this.closeModal();
+    
+  }
+
+  // an observable that will count how long will the system process the confirm button.
+  // it will also activate when i takes too long 
+  async validatePickUpLocation(loading:any, waitingTime:number,){
+
+    const toast = await this.toastController.create({
+      header: 'Slow internet connection',
+      message: 'Please confirm again',
+      position: 'top',
+      duration: 5000,
+      color: 'warning',
+    });
+
+    /* CREATE OBSERVERS */
+    // VALIDATE LATITUDE ---------
+    let validateLatitude = new Observable(observer => {
+
+      setTimeout(() => {
+        // check if may nalagay na values sa pick up location
+        var pickUpLocationValue = this.mapsService.getPickUpLocation();
+        observer.next(pickUpLocationValue.latitude);
+        observer.complete();
+      }, waitingTime);
+    });
+    // END VALIDATE LATITUDE ------
+
+     // VALIDATE LATITUDE ---------
+    let validateLongitude = new Observable(observer => {
+
+      setTimeout(() => {
+        // check if may nalagay na values sa pick up location
+        var pickUpLocationValue = this.mapsService.getPickUpLocation();
+        observer.next(pickUpLocationValue.longitude);
+        observer.complete();
+      }, waitingTime);
+    });
+    // END VALIDATE LATITUDE ------
+    /* CREATE OBSERVERS */
+
+    /* CREATE SUBSCRIBERS */
+    validateLatitude.subscribe(observedValue => {
+      if (observedValue == null) {
+        loading.dismiss();
+        toast.present();
+      }
+    });
+
+    validateLongitude.subscribe(observedValue => {
+      if (observedValue == null) {
+        loading.dismiss();
+        toast.present();
+      }
+    });
+    /* END SUBSCRIBERS */
+
+    // permission to close the modal
+    validateLongitude.subscribe(observableValue => {
+      if (observableValue != null) {
+        loading.dismiss();
+        this.closeModal();
+        // console.clear();
+      }
+    });
   }
 
 }
