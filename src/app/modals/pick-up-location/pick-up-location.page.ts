@@ -112,6 +112,7 @@ export class PickUpLocationPage implements OnInit {
       latLng = new google.maps.Map(document.getElementById('map'), mapOptions);
 
       //LOAD THE MAP WITH THE PREVIOUS VALUES AS PARAMETERS.
+      console.log(resp.coords.latitude, resp.coords.longitude, 'ako yung asa load map');
       this.getAddressFromCoords(resp.coords.latitude, resp.coords.longitude); 
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions); 
       this.map.addListener('tilesloaded', () => {
@@ -151,7 +152,7 @@ export class PickUpLocationPage implements OnInit {
       })
       .catch((error) =>{ 
         this.address = "Address Not Available!";
-        alert(error);
+        // alert(error);
       }); 
   }
 
@@ -299,7 +300,7 @@ export class PickUpLocationPage implements OnInit {
 
     // get the location address name 
     this.getAddressFromCoords(this.lat, this.long);
-    console.log(this.address, 'ako yung pinapaconsole ni jhay');
+    // console.log(this.address, 'ako yung pinapaconsole ni jhay');
     if (this.address == 'Address Not Available!') {
       this.address = 'Pinned successfully';
     }
