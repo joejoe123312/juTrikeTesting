@@ -113,21 +113,13 @@ export class Tab2Page {
     },
   });
   directionsRenderer.setMap(map);
-  // directionsRenderer.setPanel(document.getElementById("right-panel"));
-  // const control = document.getElementById("floating-panel");
-  // control.style.display = "block";
-  // console.log(control.style.display);
-  // map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
-/*   const onChangeHandler = function () {
-    calculateAndDisplayRoute(directionsService, directionsRenderer);
-  };
-  document.getElementById("start").addEventListener("change", onChangeHandler);
-  document.getElementById("end").addEventListener("change", onChangeHandler); */
+
   
   this.calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng);
 }
  
- calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng) {
+
+calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng) {
   const start = {lat: startLat, lng: startLng};
   const end = {lat: endLat, lng: endLng};
   directionsService.route(
@@ -274,10 +266,10 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
         var endLat = dropOffLocation.latitude;
         var endLng = dropOffLocation.longitude;
         this.loadMap(startLat, startLng, endLat, endLng);
-
+        console.log(startLat, startLng, endLat, endLng, 'ako yung asa launch drop off modal');
         this.getDurationAndDistanec(startLat, startLng, endLat, endLng);
-        console.clear();
-        console.log('ready for booking set to true');
+        // console.clear();
+        // console.log('ready for booking set to true');
         this.readyForBooking = true;
         this.restartButtonShow = true;
       }else{

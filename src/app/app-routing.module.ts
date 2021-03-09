@@ -65,6 +65,10 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'testing-page',
+    loadChildren: () => import('./testing-page/testing-page.module').then( m => m.TestingPagePageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
   },
@@ -78,6 +82,7 @@ const routes: Routes = [
     loadChildren: () => import('./modals/drop-of-location/drop-of-location.module').then( m => m.DropOfLocationPageModule),
     canActivate: [AuthGuard]
   },
+  
 
 ];
 @NgModule({

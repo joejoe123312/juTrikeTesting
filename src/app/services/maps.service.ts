@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AppAlertService } from './app-alert.service';
 
 declare var google: any;
 
@@ -26,8 +28,11 @@ export class MapsService {
   distance: number;
   estimatedTime: number;
   
+  durationAndDistance:object;
 
-  constructor() { }
+  constructor(
+    private appalert:AppAlertService,
+  ) { }
 
   getDistanceAndEstimatedTime(){
     return {
@@ -85,5 +90,70 @@ export class MapsService {
   }
 
   
+  /* COMMON GEOCODING METHODS */
+  getDurationAndDistance(startLat, startLng, endLat, endLng) {
+    return new Observable(observer => {
+      const start = {lat: startLat, lng: startLng};
+    const end = {lat: endLat, lng: endLng};
+    
+    let distance:string;
+    let duration:string;
+    let originList:any;
+    let destinationList:any;
+
+    let returnObj:any;
+    
+    const service = new google.maps.DistanceMatrixService();
+    service.getDistanceMatrix(
+      {
+        origins: [start],
+        destinations: [end],
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.METRIC,
+        avoidHighways: false,
+        avoidTolls: false,
+      },
+      (response, status) => {
+        if (status !== "OK") {
+          alert("Error was: " + status);
+        } else {
+          
+          originList = response.originAddresses; // papakita niya yung address
+          destinationList = response.destinationAddresses; // papakita niya yung address
+          
+
+          for (let i = 0; i < originList.length; i++) {
+            const results = response.rows[i].elements;
+
+            for (let j = 0; j < results.length; j++) {
+                distance = results[j].distance.text;
+            }
+            
+            for (let j = 0; j < results.length; j++) {
+                duration = results[j].duration.text;
+            }
+          }
+          
+          
+          returnObj = {
+            origin: originList[0],
+            destination: destinationList[0],
+            distance: distance,
+            duration: duration,
+          };
+
+          observer.next(returnObj);
+
+          observer.complete(); 
+        }
+      }
+    );
+
+    }); 
   
+
+  }
+  /* COMMON GEOCODING METHODS */
+  
+
 }
