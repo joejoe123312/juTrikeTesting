@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { CrudServiceService } from '../services/crud-service.service';
 import { MapsService } from '../services/maps.service';
@@ -14,7 +15,7 @@ export class TravelCostPage implements OnInit {
   fullName:string;
   
   pickUpLocation: any;
-  dropOfLocation: any
+  dropOfLocation: any;
   pickUpAddress:string;
   dropOffAddress: string;
 
@@ -27,10 +28,16 @@ export class TravelCostPage implements OnInit {
     private userService: UserServiceService,
     private crudService: CrudServiceService,
     private mapsService: MapsService,
+    private route: Router,
   ) { }
 
   async ionViewWillEnter() 
   {
+    this.middlewareDropOffPickUpLocation();
+  }
+
+  // create a middleware when pick up location is null and drop off location is null redirect back to homepage
+  async middlewareDropOffPickUpLocation(){
     this.pickUpLocation = this.mapsService.getPickUpLocation();
     this.dropOfLocation = this.mapsService.getDropOffLocation();
 
@@ -41,7 +48,11 @@ export class TravelCostPage implements OnInit {
     const timeAndDistance = this.mapsService.getDistanceAndEstimatedTime();
     this.distance = timeAndDistance.distance;
     this.duration = timeAndDistance.estimatedTime;
-
+    
+    if ((this.pickUpAddress == null) || (this.dropOffAddress == null) || (this.distance == null) || (this.duration == null)) {
+      this.route.navigate(['./tabs/home']);
+    }
+    
   }
 
   ngOnInit(){
