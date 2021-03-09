@@ -14,6 +14,7 @@ import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@io
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { MapsService } from '../../services/maps.service';
 import { ToastController } from '@ionic/angular';
+import { Console } from 'console';
 declare var google: any;
 
 @Component({
@@ -61,9 +62,9 @@ export class PickUpLocationPage implements OnInit {
     const geocoder = new google.maps.Geocoder(); 
    }
 
-  async ngOnInit() {
-    await this.loadMap();
-    await this.setCurrentLocation();
+   async ngOnInit() {
+     await this.loadMap();
+     await this.setCurrentLocation();
   }
 
    async closeModal() {
@@ -85,6 +86,9 @@ export class PickUpLocationPage implements OnInit {
 
    //LOADING THE MAP HAS 2 PARTS.
    async loadMap() {
+       
+  const geocoder = new google.maps.Geocoder();
+  const infowindow = new google.maps.InfoWindow();
     const loading = await this.loadingCtrl.create({
       message:'Getting your current location ...'
     });
@@ -120,11 +124,14 @@ export class PickUpLocationPage implements OnInit {
         this.lat = this.map.center.lat()
         this.long = this.map.center.lng()
       }); 
+      this.getAddressfromLatLong(resp.coords.latitude, resp.coords.longitude)
+
 
       loading.dismiss();
     }).catch((error) => {
       console.log('Error getting location', error);
     });
+
   }
 
   
@@ -159,6 +166,7 @@ export class PickUpLocationPage implements OnInit {
   //FUNCTION SHOWING THE COORDINATES OF THE POINT AT THE CENTER OF THE MAP
   ShowCords(){
     alert('lat' +this.lat+', long'+this.long )
+    this.getAddressFromCoords(this.lat, this.long);
   }
   
   //AUTOCOMPLETE, SIMPLY LOAD THE PLACE USING GOOGLE PREDICTIONS AND RETURNING THE ARRAY.
@@ -376,5 +384,30 @@ export class PickUpLocationPage implements OnInit {
       }
     });
   }
+
+getAddressfromLatLong(lat,long)
+{
+  const geocoder = new google.maps.Geocoder();
+  const infowindow = new google.maps.InfoWindow();
+  // 17.6188647 ,121.72674359999999
+  const latlng = {
+    lat: lat,
+    lng: long,
+  };
+  geocoder.geocode({ location: latlng }, (results, status) => {
+    if (status === "OK") {
+      if (results[0]) {
+        infowindow.setContent(results[0].formatted_address);
+        var infoAddress = results[0].formatted_address;
+        console.log(infoAddress, 'this log is from coor.resp.lat and long');
+      } else {
+        window.alert("No results found");
+      }
+    } else {
+      window.alert("Geocoder failed due to: " + status);
+    }
+  });
+  
+}
 
 }
