@@ -29,6 +29,7 @@ export class Tab2Page {
     // @ViewChild('homeMap',  {static: false}) mapElement: ElementRef;
   
   mapShow:boolean;
+  restartButtonShow:boolean = false;
 
   map: any;
   address:string;
@@ -85,6 +86,7 @@ export class Tab2Page {
 
     // initialize pickup and dropoff address
     this.getPickUpAndDropOffAddress();
+    // alert('nag restart na ako nag click na ako ng button');
   }
 
   getPickUpAndDropOffAddress(){
@@ -223,10 +225,23 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
 
       // check if pick up location is not empty
       const pickUpLocation = this.mapsService.getPickUpLocation();
-      console.log(pickUpLocation, 'ako si launch pick up modal');
+      const dropOffLocation = this.mapsService.getDropOffLocation();
+      
       if ((pickUpLocation.latitude != null) && (pickUpLocation.longitude != null)) {
         // may mga laman yung mga latitude at longi
         this.selectDestination = true; 
+
+        // kapag gustong palitan ng user yung pick up location niya
+        if ((dropOffLocation.latitude != null) && (dropOffLocation.longitude)) {
+            var startLat = pickUpLocation.latitude;
+            var startLng = pickUpLocation.longitude;
+            var endLat = dropOffLocation.latitude;
+            var endLng = dropOffLocation.longitude;
+            this.loadMap(startLat, startLng, endLat, endLng);
+
+            this.readyForBooking = true;
+        }
+
       }else{
         // walang laman yung lati saka longi
         this.pickUpAddress = null;
@@ -261,19 +276,24 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
         this.loadMap(startLat, startLng, endLat, endLng);
 
         this.getDurationAndDistanec(startLat, startLng, endLat, endLng);
-
+        console.clear();
+        console.log('ready for booking set to true');
         this.readyForBooking = true;
-        // console.clear();
+        this.restartButtonShow = true;
+      }else{
+        console.clear();
+        console.log('hindi nag set yung ready for booking');
       }
 
     });
 
     modal.onDidDismiss().then(() => {
-      // console.clear();
+      //  console.clear();
     });
 
     return await modal.present();
   }
+
 
   bookNow(){
     
