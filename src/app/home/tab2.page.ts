@@ -94,7 +94,6 @@ export class Tab2Page {
     this.dropOffAddress = this.mapsService.getDropOffAddress();
   }
 
-
   //LOADING THE MAP HAS 2 PARTS.
   loadMap(startLat, startLng, endLat, endLng) {
   const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -127,6 +126,10 @@ calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startL
       origin: start,
       destination: end,
       travelMode: google.maps.TravelMode.DRIVING,
+      drivingOptions: {
+        departureTime: new Date(Date.now()),  // for the time N milliseconds from now.
+        trafficModel: 'optimistic'
+      }
     },
     (response, status) => {
       if (status === "OK") {
@@ -154,6 +157,7 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
       unitSystem: google.maps.UnitSystem.METRIC,
       avoidHighways: false,
       avoidTolls: false,
+      
       
     },
     (response, status) => {

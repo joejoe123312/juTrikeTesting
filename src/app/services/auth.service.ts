@@ -44,7 +44,7 @@ export class AuthService
        showBackdrop: true
    });
     loading.present();
-    
+
     this.afauth.setPersistence(firebase.default.auth.Auth.Persistence.LOCAL).then(()=>{
       this.afauth.signInWithEmailAndPassword(email,password)
       .then((data)=>{
@@ -87,6 +87,7 @@ export class AuthService
        this.router.navigate(['/login']);
      });
    }
+   
   
     
 }
