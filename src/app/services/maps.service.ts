@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppAlertService } from './app-alert.service';
+import { AlertController } from '@ionic/angular';
 
 declare var google: any;
 
@@ -32,7 +33,10 @@ export class MapsService {
 
   constructor(
     private appalert:AppAlertService,
+    public alertController: AlertController,
   ) { }
+
+
 
   getDistanceAndEstimatedTime(){
     return {
@@ -150,8 +154,35 @@ export class MapsService {
     );
 
     }); 
-  
 
+  }
+
+  getAddressfromLatLong(lat,long)
+  {
+      return new Observable(observer => {
+        const geocoder = new google.maps.Geocoder();
+      const infowindow = new google.maps.InfoWindow();
+      // 17.6188647 ,121.72674359999999
+      const latlng = {
+        lat: lat,
+        lng: long,
+      };
+      geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === "OK") {
+          if (results[0]) {
+            infowindow.setContent(results[0].formatted_address);
+            var infoAddress = results[0].formatted_address;
+            observer.next(infoAddress);
+            observer.complete();
+          } else {
+            window.alert("No results found");
+          }
+        } else {
+         alert('No internet connection');
+        }
+      });
+    }); // end of observer
+    
   }
   /* COMMON GEOCODING METHODS */
   

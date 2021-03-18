@@ -19,10 +19,13 @@ export class TestingPagePage implements OnInit {
     var startLng = 121.7267278;
     var endLat = 17.629654;
     var endLng = 121.7334073;
-    var result = this.mapsService.getDurationAndDistance(startLat, startLng, endLat, endLng);
-    result.subscribe(observedValue => {
-      console.log(observedValue);
+
+    let lat = 17.618829599999998;
+    let long = 121.7267303;
+    this.mapsService.getAddressfromLatLong(lat, long).subscribe(observedValue => {
+      console.log(typeof(observedValue));
     });
+    
   }
 
 }
