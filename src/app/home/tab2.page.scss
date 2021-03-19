@@ -78,3 +78,21 @@ ion-img.image-default {
   font-size: 20px;
   font-weight: bold;
 }
+
+.active {
+  background-color: white;
+  color: black;
+}
+
+.options {
+  font-size: 30px;
+  padding: 5px;
+  border-radius: 10px;
+  width: 50px;
+  // color: white;
+  // background-color: rgb(46, 46, 246);
+}
+
+.commuterOptionCard {
+  background-color: #6299ff;
+}

@@ -5,6 +5,18 @@
 </ion-header>
 
 <ion-content>
+  <ion-card class="commuterOptionCard">
+    <ion-card-content>
+      <ion-row class="ion-text-center">
+        <ion-col [ngClass]="{'active': commuterSelector === 1}" (click)="singlePersonBtn()" id="singlePerson" class="active options" size="6">
+            <ion-icon name="person"></ion-icon>
+        </ion-col>
+        <ion-col [ngClass]="{'active': commuterSelector === 2}" (click)="dualPersonBtn()" id="dualPerson" class="options" size="6">
+            <ion-icon name="people"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
   <ion-card>
     <ion-card-content>
       <ion-item (click)="launchPickUpModal()">
@@ -25,7 +37,7 @@
             <p>Click to enter drop off location</p>
         </ion-label>
       </ion-item>
-      
+
     </ion-card-content>
   </ion-card>
 
@@ -35,12 +47,12 @@
     <!-- <ion-icon name="pin" size="large" color="danger"></ion-icon> -->
     </div>
     <div id="floating-panel"></div>
-    
+
     <!-- <div id="right-panel" style=""></div> -->
     <div id="homeMap" style="height: 100%;"></div>
-    
+
   </div>
-  
+
 </ion-content>
 </ion-content>
 
@@ -52,6 +64,6 @@
       <ion-button shape="block" (click)="bookNow()">Book Now</ion-button>
     </div>
   </ion-card-content>
-</ion-card>   
+</ion-card>
 
 <!-- Heto yung nag babago -->

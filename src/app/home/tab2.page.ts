@@ -27,14 +27,14 @@ declare var google: any;
 })
 export class Tab2Page {
     // @ViewChild('homeMap',  {static: false}) mapElement: ElementRef;
-  
+
   mapShow:boolean;
   restartButtonShow:boolean = false;
 
   map: any;
   address:string;
   lat: string;
-  long: string; 
+  long: string;
 
   // used when autocomplete has been clicked
   latitude: any;
@@ -43,7 +43,7 @@ export class Tab2Page {
 
   //pangalan kung nasan yung address
   pickUpAddress: string;
-  dropOffAddress: string;   
+  dropOffAddress: string;
 
   dropOffLatitude: any;
   dropOffLongitude: any;
@@ -61,7 +61,11 @@ export class Tab2Page {
   autocompleteItems: any[];
   location: any;
   placeid: any;
-  GoogleAutocomplete: any;  
+  GoogleAutocomplete: any;
+
+  // for the selections if single or dual
+  commuterSelector:number = 1;
+
   constructor(
         private auth: AuthService,
         private afs: AngularFirestore,
@@ -70,12 +74,12 @@ export class Tab2Page {
         private router: Router,
         private fauth: AngularFireAuth,
         private geolocation: Geolocation,
-        private nativeGeocoder: NativeGeocoder,    
+        private nativeGeocoder: NativeGeocoder,
         public zone: NgZone,
         public mapsService: MapsService,
         // for launching modals
         public modalController: ModalController,
-  ) 
+  )
   {
    }
 // tslint:disable-next-line: use-lifecycle-interface
@@ -99,7 +103,7 @@ export class Tab2Page {
   const directionsRenderer = new google.maps.DirectionsRenderer();
   const directionsService = new google.maps.DirectionsService();
   const map = new google.maps.Map(document.getElementById("homeMap"), {
-    zoom: 20,
+    zoom: 15,
     center: { lat: 17.613419058438215, lng:121.72716086550331 },
     disableDefaultUI: true,
     restriction: {
@@ -113,10 +117,10 @@ export class Tab2Page {
   });
   directionsRenderer.setMap(map);
 
-  
+
   this.calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng);
 }
- 
+
 
 calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng) {
   const start = {lat: startLat, lng: startLng};
@@ -157,8 +161,8 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
       unitSystem: google.maps.UnitSystem.METRIC,
       avoidHighways: false,
       avoidTolls: false,
-      
-      
+
+
     },
     (response, status) => {
       if (status !== "OK") {
@@ -209,12 +213,12 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
   );
 }
 
-  
+
   async launchPickUpModal(){
 
     const modal = await this.modalController.create({
       component: PickUpLocationPage,
-    }); 
+    });
 
     modal.onWillDismiss().then(() => {
       this.getPickUpAndDropOffAddress();
@@ -222,10 +226,10 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
       // check if pick up location is not empty
       const pickUpLocation = this.mapsService.getPickUpLocation();
       const dropOffLocation = this.mapsService.getDropOffLocation();
-      
+
       if ((pickUpLocation.latitude != null) && (pickUpLocation.longitude != null)) {
         // may mga laman yung mga latitude at longi
-        this.selectDestination = true; 
+        this.selectDestination = true;
 
         // kapag gustong palitan ng user yung pick up location niya
         if ((dropOffLocation.latitude != null) && (dropOffLocation.longitude)) {
@@ -244,7 +248,7 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
       }
 
     });
-    
+
     return await modal.present();
   }
 
@@ -264,7 +268,7 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
       if (dropOffLocation.location != null) {
 
         // get the latitude and longitude of the start and end locations
-        
+
         var startLat = pickUpLocation.latitude;
         var startLng = pickUpLocation.longitude;
         var endLat = dropOffLocation.latitude;
@@ -292,15 +296,26 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
 
 
   bookNow(){
-    
+
     this.mapsService.updateDistanceAndEstimatedTime(this.distance, this.duration);
 
     this.router.navigate(['./travel-cost']);
   }
-  
+
+  singlePersonBtn(){
+    this.commuterSelector = 1;
+    console.clear();
+    console.log(this.commuterSelector);
+  }
+
+  dualPersonBtn(){
+    console.clear();
+    this.commuterSelector = 2;
+    console.log(this.commuterSelector);
+  }
+
 }
 
 
 
 
-  
