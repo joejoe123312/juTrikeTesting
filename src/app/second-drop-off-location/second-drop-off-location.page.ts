@@ -4,24 +4,25 @@ import { NgZone } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { User } from '../../models/users';
-import { AppAlertService } from '../../services/app-alert.service';
-import { AuthService } from '../../services/auth.service';
+import { User } from '../models/users';
+import { AppAlertService } from '../services/app-alert.service';
+import { AuthService } from '../services/auth.service';
 import { Observable, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { ViewChild , ElementRef } from '@angular/core';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { MapsService } from '../../services/maps.service';
+import { MapsService } from '../services/maps.service';
 
 declare var google: any;
 
 @Component({
-  selector: 'app-drop-of-location',
-  templateUrl: './drop-of-location.page.html',
-  styleUrls: ['./drop-of-location.page.scss'],
+  selector: 'app-second-drop-off-location',
+  templateUrl: './second-drop-off-location.page.html',
+  styleUrls: ['./second-drop-off-location.page.scss'],
 })
-export class DropOfLocationPage implements OnInit {
+export class SecondDropOffLocationPage implements OnInit {
+
   @ViewChild('map',  {static: false}) mapElement: ElementRef;
   modalTitle: string;
   modelId: number;
@@ -68,10 +69,6 @@ export class DropOfLocationPage implements OnInit {
 
     await this.modalController.dismiss();
   }
-
-
-
-
 
   getAddressFromCoords(lattitude, longitude) {
     let options: NativeGeocoderOptions = {
@@ -184,9 +181,9 @@ export class DropOfLocationPage implements OnInit {
 
       // update maps service so you can use the data in other pages
 
-      await this.mapsService.updateDropOfLocation(this.latitude, this.longitude, this.pickUpLocation);
+      await this.mapsService.updateSecondDropOffLocation(this.latitude, this.longitude, this.pickUpLocation);
+      // console.log(this.latitude, this.longitude, this.pickUpLocation);
 
-      // await console.log(this.mapsService.getDropOffAddress());
 
       this.closeModal();
 
@@ -226,7 +223,4 @@ export class DropOfLocationPage implements OnInit {
   GoTo(){
     return window.location.href = 'https://www.google.com/maps/search/?api=1&query=Google&query_place_id='+this.placeid;
   }
-
-
-
 }

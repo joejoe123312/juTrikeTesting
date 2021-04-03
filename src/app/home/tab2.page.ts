@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { User } from '../models/users';
 import { AppAlertService } from '../services/app-alert.service';
 import { AuthService } from '../services/auth.service';
@@ -17,6 +17,8 @@ import { ModalController } from '@ionic/angular';
 import { PickUpLocationPage } from '../modals/pick-up-location/pick-up-location.page';
 import { DropOfLocationPage } from '../modals/drop-of-location/drop-of-location.page';
 
+import { TravelServiceService } from '../services/travel-service.service';
+import { SecondDropOffLocationPage } from '../second-drop-off-location/second-drop-off-location.page';
 
 declare var google: any;
 
@@ -28,8 +30,7 @@ declare var google: any;
 export class Tab2Page {
     // @ViewChild('homeMap',  {static: false}) mapElement: ElementRef;
 
-  mapShow:boolean;
-  restartButtonShow:boolean = false;
+  // mapShow:boolean;
 
   map: any;
   address:string;
@@ -65,6 +66,9 @@ export class Tab2Page {
 
   // for the selections if single or dual
   commuterSelector:number = 1;
+  sameDropOffLocation:boolean = true;
+
+  secondDropOffAddress:string;
 
   constructor(
         private auth: AuthService,
@@ -79,18 +83,29 @@ export class Tab2Page {
         public mapsService: MapsService,
         // for launching modals
         public modalController: ModalController,
+        public alertController: AlertController,
+        private travelServices: TravelServiceService,
+        public toastController: ToastController,
   )
   {
-   }
+  }
+
+
+
 // tslint:disable-next-line: use-lifecycle-interface
   //LOAD THE MAP ONINIT.
   ionViewWillEnter() {
     // initiate map show default value is false
-    this.mapShow = this.mapsService.getMapShowStatus();
+    // this.mapShow = this.mapsService.getMapShowStatus();
+    // console.log('nag enter ako');
+
+    //
 
     // initialize pickup and dropoff address
     this.getPickUpAndDropOffAddress();
-    // alert('nag restart na ako nag click na ako ng button');
+
+    // initiate commuterSelector
+    this.commuterSelector = this.travelServices.getCommuterSelector();
   }
 
   getPickUpAndDropOffAddress(){
@@ -100,25 +115,25 @@ export class Tab2Page {
 
   //LOADING THE MAP HAS 2 PARTS.
   loadMap(startLat, startLng, endLat, endLng) {
-  const directionsRenderer = new google.maps.DirectionsRenderer();
-  const directionsService = new google.maps.DirectionsService();
-  const map = new google.maps.Map(document.getElementById("homeMap"), {
-    zoom: 15,
-    center: { lat: 17.613419058438215, lng:121.72716086550331 },
-    disableDefaultUI: true,
-    restriction: {
-      latLngBounds: {
-        north: 17.6867129,
-        south: 17.5174437,
-        east: 121.8369136,
-        west: 121.6820089,
-      },
-    },
-  });
-  directionsRenderer.setMap(map);
+  // const directionsRenderer = new google.maps.DirectionsRenderer();
+  // const directionsService = new google.maps.DirectionsService();
+  // const map = new google.maps.Map(document.getElementById("homeMap"), {
+  //   zoom: 15,
+  //   center: { lat: 17.613419058438215, lng:121.72716086550331 },
+  //   disableDefaultUI: true,
+  //   restriction: {
+  //     latLngBounds: {
+  //       north: 17.6867129,
+  //       south: 17.5174437,
+  //       east: 121.8369136,
+  //       west: 121.6820089,
+  //     },
+  //   },
+  // });
+  // directionsRenderer.setMap(map);
 
 
-  this.calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng);
+  // this.calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng);s
 }
 
 
@@ -213,6 +228,38 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
   );
 }
 
+  readyForBookingValidator(startLat, startLng, endLat, endLng){
+    // check if pick up location, drop off location and second drop off location is present (if second drop offlocation)
+    let valid = true;
+
+    if ((this.pickUpAddress == null) && (this.dropOffAddress == null)) {
+        valid = false;
+
+        // check if the user has clicked yes to yes to different drop off locations
+        if (this.sameDropOffLocation == false) {
+          // get second drop off location
+          if (this.secondDropOffAddress == null) {
+            valid = false;
+          }
+        }
+    }
+
+    // check if the user has clicked yes to yes to different drop off locations
+    if (this.sameDropOffLocation == false) {
+      // get second drop off location
+      if (this.secondDropOffAddress == null) {
+        valid = false;
+        // console.log('ako yung nag activate', 'ako si second drop off address:', this.secondDropOffAddress);
+      }
+    }
+
+    this.readyForBooking = valid;
+
+    if (valid == true) {
+      // get back here
+      this.loadMap(startLat, startLng, endLat, endLng);
+    }
+  }
 
   async launchPickUpModal(){
 
@@ -228,6 +275,7 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
       const dropOffLocation = this.mapsService.getDropOffLocation();
 
       if ((pickUpLocation.latitude != null) && (pickUpLocation.longitude != null)) {
+
         // may mga laman yung mga latitude at longi
         this.selectDestination = true;
 
@@ -239,9 +287,11 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
             var endLng = dropOffLocation.longitude;
             this.loadMap(startLat, startLng, endLat, endLng);
 
-            this.readyForBooking = true;
-        }
+            this.readyForBookingValidator(startLat, startLng, endLat, endLng);
+          }
 
+          // up the state.
+          this.mapsService.updatePickUpLocation(pickUpLocation.latitude, pickUpLocation.longitude, pickUpLocation.location);
       }else{
         // walang laman yung lati saka longi
         this.pickUpAddress = null;
@@ -260,11 +310,13 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
     });
 
      modal.onWillDismiss().then(() => {
+
       this.getPickUpAndDropOffAddress();
 
       // determine if drop off location is already set
       const dropOffLocation = this.mapsService.getDropOffLocation();
       const pickUpLocation = this.mapsService.getPickUpLocation();
+
       if (dropOffLocation.location != null) {
 
         // get the latitude and longitude of the start and end locations
@@ -273,15 +325,70 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
         var startLng = pickUpLocation.longitude;
         var endLat = dropOffLocation.latitude;
         var endLng = dropOffLocation.longitude;
-        this.loadMap(startLat, startLng, endLat, endLng);
-        console.log(startLat, startLng, endLat, endLng, 'ako yung asa launch drop off modal');
+
         this.getDurationAndDistanec(startLat, startLng, endLat, endLng);
-        // console.clear();
+
         // console.log('ready for booking set to true');
-        this.readyForBooking = true;
-        this.restartButtonShow = true;
+        this.readyForBookingValidator(startLat, startLng, endLat, endLng);
+
+        this.mapsService.updateDropOfLocation(dropOffLocation.latitude, dropOffLocation.longitude, dropOffLocation.location);
       }else{
         console.clear();
+        console.log('hindi nag set yung ready for booking');
+      }
+
+    });
+
+    modal.onDidDismiss().then(() => {
+      //  console.clear();
+      // this.readyForBookingValidator();
+    });
+
+    return await modal.present();
+  }
+
+  async secondDropOfLocation(){
+
+    // DropOfLocationPage
+    const modal = await this.modalController.create({
+      component: SecondDropOffLocationPage,
+    });
+
+     modal.onWillDismiss().then(() => {
+      this.getPickUpAndDropOffAddress();
+
+      // determine if drop off location is already set
+      const dropOffLocation = this.mapsService.getSecondDropOffLocation();
+      const pickUpLocation = this.mapsService.getPickUpLocation();
+
+      if (dropOffLocation != null) {
+
+        // get the latitude and longitude of the start and end locations
+        var startLat = pickUpLocation.latitude;
+        var startLng = pickUpLocation.longitude;
+        var endLat = dropOffLocation.latitude;
+        var endLng = dropOffLocation.longitude;
+
+        this.getDurationAndDistanec(startLat, startLng, endLat, endLng);
+
+        let secondDropOffLocation = {
+          pickUpLocation:pickUpLocation,
+          dropOffLocation:dropOffLocation,
+          secondDropOffLocationAddress: dropOffLocation.location,
+        }
+
+        this.travelServices.updateSecondDropOffLocation(secondDropOffLocation);
+
+        // set the secondDropOffAddress for the second drop off address
+        this.secondDropOffAddress = dropOffLocation;
+
+        // UP THE STATE
+        this.mapsService.updateSecondDropOffLocation(dropOffLocation.latitude, dropOffLocation.longitude, dropOffLocation.location);
+
+        this.readyForBookingValidator(startLat, startLng, endLat, endLng);
+
+      }else{
+        // console.clear();
         console.log('hindi nag set yung ready for booking');
       }
 
@@ -299,19 +406,75 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
 
     this.mapsService.updateDistanceAndEstimatedTime(this.distance, this.duration);
 
+    // UP THE STATE
+    this.travelServices.updateCommuterSelectorAndSameDropOffLocation(this.commuterSelector, this.sameDropOffLocation);
+
     this.router.navigate(['./travel-cost']);
   }
 
   singlePersonBtn(){
     this.commuterSelector = 1;
     console.clear();
-    console.log(this.commuterSelector);
   }
 
-  dualPersonBtn(){
+  async dualPersonBtn(){
+    // change and move the selector
+    this.travelServices.turnCommuterSelectorToTwo();
+    this.commuterSelector = this.travelServices.getCommuterSelector();
+
+    const dualPassengersToast = await this.toastController.create({
+      header: 'Travel set to two drop off locations',
+      duration: 4000,
+      color: 'success',
+      position: 'top',
+    });
+
+    const singlePassengerToast = await this.toastController.create({
+      header: 'Travel set to a single drop off location',
+      duration: 4000,
+      color: 'success',
+      position: 'top',
+    });
+
+    const alert = await this.alertController.create({
+      header: 'Book with the same drop-off location?',
+      // subHeader: 'Subtitle',
+      // message: 'This is an alert message.',
+      buttons: [
+        {
+          text: "No",
+          handler: () => {
+            // same locations
+            this.travelServices.turnSameDropOffLocationToFalse();
+            this.sameDropOffLocation = this.travelServices.getSameDropOffLocationValue(); // this will return false
+
+            // update the mapsServices properties commuter selector and drop off location
+            this.mapsService.updateCommuterSelectorSameDropOffLocation();
+
+            // notify the user when they clicked no
+            dualPassengersToast.present();
+          }
+        },
+        {
+          text: "Yes",
+          role: 'cancel',
+          handler: () => {
+            this.travelServices.turnSameDropOffLocationToTrue();
+            this.sameDropOffLocation = this.travelServices.getSameDropOffLocationValue(); // this will return true
+
+            // update the mapsServices properties commuter selector and drop off location
+            this.mapsService.updateCommuterSelectorSameDropOffLocation();
+
+            singlePassengerToast.present();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
     console.clear();
     this.commuterSelector = 2;
-    console.log(this.commuterSelector);
   }
 
 }

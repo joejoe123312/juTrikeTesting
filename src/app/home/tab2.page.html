@@ -17,6 +17,16 @@
       </ion-row>
     </ion-card-content>
   </ion-card>
+  <!-- Form for the other person -->
+  <ion-card *ngIf="commuterSelector == 2" class="slide-bottom">
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating"><strong>Second Passenger name</strong></ion-label>
+        <ion-input></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <!-- Form for the other person -->
   <ion-card>
     <ion-card-content>
       <ion-item (click)="launchPickUpModal()">
@@ -37,30 +47,41 @@
             <p>Click to enter drop off location</p>
         </ion-label>
       </ion-item>
+      <ion-item (click)="secondDropOfLocation()" *ngIf="(selectDestination == true) && (sameDropOffLocation == false) && (commuterSelector == 2)">
+        <ion-icon name="navigate-outline" slot="start"></ion-icon>
+        <ion-label>
+          <div *ngIf="secondDropOffAddress != null">
+              <b>{{secondDropOffAddress.location}}</b><br>
+          </div>
+            <p>Click to enter second drop off location</p>
+        </ion-label>
+      </ion-item>
 
     </ion-card-content>
   </ion-card>
 
-<ion-content class="ion-padding">
+<!-- <ion-content class="ion-padding">
   <div class="map-wrapper" style="height: 70%;">
     <div id="map_center">
-    <!-- <ion-icon name="pin" size="large" color="danger"></ion-icon> -->
+    <ion-icon name="pin" size="large" color="danger"></ion-icon>
     </div>
     <div id="floating-panel"></div>
 
-    <!-- <div id="right-panel" style=""></div> -->
+    <div id="right-panel" style=""></div>
     <div id="homeMap" style="height: 100%;"></div>
 
   </div>
 
-</ion-content>
+ </ion-content> -->
 </ion-content>
 
 <ion-card class="cards-main" *ngIf="readyForBooking == true">
   <ion-card-content class="">
     <div class="">
-      <ion-label><strong>Distance : </strong><span id="distance"></span></ion-label>
-      <ion-label><strong>Travel Time :</strong> <span id="duration"></span></ion-label>
+      <div *ngIf="sameDropOffLocation">
+        <ion-label><strong>Distance : </strong><span id="distance">{{distance}}</span></ion-label>
+        <ion-label><strong>Travel Time :</strong> <span id="duration">{{duration}}</span></ion-label>
+      </div>
       <ion-button shape="block" (click)="bookNow()">Book Now</ion-button>
     </div>
   </ion-card-content>

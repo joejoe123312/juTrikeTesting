@@ -12,18 +12,67 @@
 <ion-content>
   <ion-img src="./assets/relax.svg"></ion-img>
 
+  <!-- For single commuters -->
   <ion-card class="travelSummary ion-margin-bottom">
     <ion-card-header>
       <ion-card-title class="summaryHeader">Summary</ion-card-title>
     </ion-card-header>
-    <ion-card-content>      
-      <p><b>Pick up:</b> {{pickUpAddress}}</p>
-      <p><b>Dropoff:</b> {{dropOffAddress}}</p>
-      <p><b>Distance:</b> {{distance}}</p>
-      <p><b>Estimated time:</b> {{duration}}</p>
-      <p><b>Price:</b> 100 Pesos</p>
+    <ion-card-content>
+      <p>
+        <b>Pick up:</b><br>
+        {{firstSummary.pickUp}}
+      </p>
+      <p>
+        <b>Dropoff:</b><br>
+        {{firstSummary.dropOff}}
+      </p>
+      <p>
+        <b>Distance:</b><br>
+        {{firstSummary.distance}}
+      </p>
+      <p>
+        <b>Estimated time:</b><br>
+        {{firstSummary.duration}}
+      </p>
+      <p>
+        <b>Price:</b><br>
+
+        100 Pesos
+      </p>
     </ion-card-content>
   </ion-card>
+  <!-- For single commuteres -->
+
+  <!-- For second commuters -->
+  <ion-card class="travelSummary ion-margin-bottom" *ngIf="(sameDropOffLocation == false) && (commuterSelector == 2)">
+    <ion-card-header>
+      <ion-card-title class="summaryHeader">Summary <span>(second person)</span></ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>
+        <b>Pick up:</b><br>
+        {{secondSummary.pickUp}}
+      </p>
+      <p>
+        <b>Dropoff:</b><br>
+        {{secondSummary.dropOff}}
+      </p>
+      <p>
+        <b>Distance:</b><br>
+        <!-- {{secondSummary.timeAndDistance.}} -->
+      </p>
+      <p>
+        <b>Estimated time:</b><br>
+        <!-- {{secondSummary.dropOff}} -->
+      </p>
+      <p>
+        <b>Price:</b><br>
+
+        100 Pesos
+      </p>
+    </ion-card-content>
+  </ion-card>
+  <!-- For dual commuteres -->
 
   <ion-button color="primary" expand="block" class="proceedBtn" (click)="proceed()">Proceed</ion-button>
 </ion-content>

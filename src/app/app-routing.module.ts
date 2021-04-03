@@ -31,13 +31,13 @@ const routes: Routes = [
   {
     path: 'register',
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
-    
+
   },
   {
     path: 'forgot-password',
     loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule),
     canActivate: [AuthGuard]
-    
+
   },
   {
     path: 'change-password',
@@ -69,10 +69,6 @@ const routes: Routes = [
     loadChildren: () => import('./testing-page/testing-page.module').then( m => m.TestingPagePageModule)
   },
   {
-    path: '**',
-    loadChildren: () => import('./page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
-  },
-  {
     path: 'pick-up-location',
     loadChildren: () => import('./modals/pick-up-location/pick-up-location.module').then( m => m.PickUpLocationPageModule),
     canActivate: [AuthGuard]
@@ -82,7 +78,16 @@ const routes: Routes = [
     loadChildren: () => import('./modals/drop-of-location/drop-of-location.module').then( m => m.DropOfLocationPageModule),
     canActivate: [AuthGuard]
   },
-  
+  {
+    path: 'second-drop-off-location',
+    loadChildren: () => import('./second-drop-off-location/second-drop-off-location.module').then( m => m.SecondDropOffLocationPageModule)
+  },
+
+  {
+    path: '**',
+    loadChildren: () => import('./page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
+  },
+
 
 ];
 @NgModule({

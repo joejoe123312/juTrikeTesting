@@ -1,0 +1,22 @@
+<ion-header class="" [translucent]="true">
+  <ion-toolbar class="color" color="primary" (click)="closeModal()">
+    <ion-icon name="close-outline" slot="end" class="close"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+
+  <ion-label class="ion-text-center">
+    <h1 class="header"><strong>Select second drop off location</strong></h1>
+  </ion-label>
+
+  <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="UpdateSearchResults($event.target.value)"
+    value="Tuguegarao City,Cagayan" placeholder="Search for a place" (ionClear)="ClearAutocomplete()"></ion-searchbar>
+
+  <ion-list [hidden]="autocompleteItems.length == 0">
+    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="SelectSearchResult(item)">
+      {{ item.description }}
+    </ion-item>
+  </ion-list>
+
+
+</ion-content>
