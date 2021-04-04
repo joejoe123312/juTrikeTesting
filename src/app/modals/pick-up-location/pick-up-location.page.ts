@@ -113,7 +113,7 @@ export class PickUpLocationPage implements OnInit {
       if (this.currentUserLat == null) {
         loading.dismiss();
         slowInternet.present();
-        this.closeModal();
+        // this.closeModal();
       }
     }, locationDurationChecker);
 

@@ -11,7 +11,14 @@ import { UserServiceService } from '../services/user-service.service';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
-  userInfo:object;
+  userInfo:any = {
+    userId: null,
+    firstname:null,
+    fullname:null,
+    lastname:null,
+    phoneNumber:null,
+    userEmail:null,
+  };
 
   constructor(
     private actionSheetController: ActionSheetController,
@@ -23,10 +30,20 @@ export class Tab3Page {
 
   ) {}
   // tslint:disable-next-line: use-lifecycle-interface
+
+  ionViewWillEnter(){
+    this.userInfo = this.userService.viewUserInfo();
+
+    if (this.userInfo.userId == null) {
+      this.router.navigate(['./splash-screen']);
+    }
+  }
+
   ngOnInit()
   {
     this.userInfo = this.userService.viewUserInfo();
   }
+
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
       header: 'Actions',
