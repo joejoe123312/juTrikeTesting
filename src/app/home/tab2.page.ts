@@ -70,6 +70,8 @@ export class Tab2Page {
 
   secondDropOffAddress:string;
 
+  secondPassengerName:string;
+
   constructor(
         private auth: AuthService,
         private afs: AngularFirestore,
@@ -403,6 +405,7 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
 
 
   bookNow(){
+    this.mapsService.updateSecondPassengerName(this.secondPassengerName);
 
     this.mapsService.updateDistanceAndEstimatedTime(this.distance, this.duration);
 

@@ -50,11 +50,21 @@ export class MapsService {
   commuterSelector:number = 1;
   sameDropOffLocation:boolean = true;
 
+  secondPassengerName:string = null;
+
   constructor(
     private appalert:AppAlertService,
     public alertController: AlertController,
     private travelServices:TravelServiceService,
   ) { }
+
+  getSecondPassengerName(){
+    return this.secondPassengerName;
+  }
+
+  updateSecondPassengerName(secondPassengerName){
+    this.secondPassengerName = secondPassengerName;
+  }
 
   // for commuter selector and same drop off location
 
