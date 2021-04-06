@@ -1,78 +1,123 @@
 
-  <ion-header class="Curve" [translucent]="true">
+  
+<ion-header class="Curve" [translucent]="true">
     <ion-toolbar class="color" color="primary">
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/tabs/home"><ion-icon name="chevron-back-outline"></ion-icon></ion-back-button>
       </ion-buttons>
-      <h1><strong>JuTrike!</strong></h1>
     </ion-toolbar>
   </ion-header>
-
-
 <ion-content>
-  <ion-img src="./assets/relax.svg"></ion-img>
 
-  <!-- For single commuters -->
-  <ion-card class="travelSummary ion-margin-bottom">
-    <ion-card-header>
-      <ion-card-title class="summaryHeader">Summary</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>
-        <b>Pick up:</b><br>
-        {{firstSummary.pickUp}}
-      </p>
-      <p>
-        <b>Dropoff:</b><br>
-        {{firstSummary.dropOff}}
-      </p>
-      <p>
-        <b>Distance:</b><br>
-        {{firstSummary.distance}}
-      </p>
-      <p>
-        <b>Estimated time:</b><br>
-        {{firstSummary.duration}}
-      </p>
-      <p>
-        <b>Price:</b><br>
+  <div class="slides ion-margin-bottom">
+    <ion-slides [options]="slidesOptions">
+      <ion-slide>
+        <ion-card>
+          <ion-card-header>
+            <div class="main">
+              <img src="https://pngimg.com/uploads/gps/gps_PNG10.png">
+            </div>
+          </ion-card-header>
+          
+          <ion-card-content class="ion-text-left">
+            <ion-card-title class="ion-margin-bottom">First Passenger</ion-card-title>
+            <ion-card-subtitle class="ion-text-right">Pick-up: {{firstSummary.pickUp}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-right">Drop-off: {{firstSummary.dropOff}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-right">Distance: {{firstSummary.distance}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-right">Duration:  {{firstSummary.duration}}</ion-card-subtitle>         
 
-        100 Pesos
-      </p>
-    </ion-card-content>
-  </ion-card>
-  <!-- For single commuteres -->
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
 
-  <!-- For second commuters -->
-  <ion-card class="travelSummary ion-margin-bottom" *ngIf="(sameDropOffLocation == false) && (commuterSelector == 2)">
-    <ion-card-header>
-      <ion-card-title class="summaryHeader">Summary <span>(second person)</span></ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>
-        <b>Pick up:</b><br>
-        {{secondSummary.pickUp}}
-      </p>
-      <p>
-        <b>Dropoff:</b><br>
-        {{secondSummary.dropOff}}
-      </p>
-      <p>
-        <b>Distance:</b><br>
-        <!-- {{secondSummary.timeAndDistance.}} -->
-      </p>
-      <p>
-        <b>Estimated time:</b><br>
-        <!-- {{secondSummary.dropOff}} -->
-      </p>
-      <p>
-        <b>Price:</b><br>
+      <ion-slide *ngIf="(sameDropOffLocation == false) && (commuterSelector == 2)">
+        <ion-card>
+          <ion-card-header>
+            <div class="main">
+              <img src="https://pngimg.com/uploads/gps/gps_PNG10.png">
+            </div>
+          </ion-card-header>
+          <ion-card-content class="ion-text-left">
+            <ion-card-title class="ion-margin-bottom">Second Passenger </ion-card-title>
+            <ion-card-subtitle class="ion-text-right">Pick-up: {{secondSummary.pickUp}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-right">Drop-off: {{secondSummary.dropOff}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-right">Distance: {{secondSummary.distance}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-right">Duration:  {{secondSummary.duration}}</ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-right">Price: </ion-card-subtitle>
+         
+            <ion-progress-bar value="0.5" color="custom"></ion-progress-bar>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+    </ion-slides>
+  </div>
 
-        100 Pesos
-      </p>
-    </ion-card-content>
-  </ion-card>
-  <!-- For dual commuteres -->
+  <div class="container">
+    <ion-item lines="none">
+      <ion-grid>
+        <!-- First Passenger Cost -->
+        <ion-row class="ion-align-items-center">
+          <ion-col size="3">
+            <ion-button color="light" fill="clear">
+              <ion-icon slot="icon-only" name="person"></ion-icon>
+            </ion-button>
+           
+          </ion-col>
+          <ion-col size="7">
+            <ion-label>
+							<h4>250.00</h4>
+              <small>First Passenger</small>
+						</ion-label>
+          </ion-col>
+          <ion-col size="2">
+            <ion-button color="light" fill="clear">
+              
+            </ion-button>
+          </ion-col>
+          
+        </ion-row>
+            <!-- Second Passenger Cost -->
+        <ion-row class="ion-align-items-center" *ngIf="(sameDropOffLocation == false) && (commuterSelector == 2)">
+          <ion-col size="3">
+            <ion-button color="light" fill="clear">
+              <ion-icon slot="icon-only" name="people"></ion-icon>
+            </ion-button>
+            <!-- <img src="https://img.icons8.com/cute-clipart/344/peso-symbol.png">               -->
+            
+          </ion-col>
+          <ion-col size="7">
+            <ion-label>
+              <h4>250.00</h4>
+              <small>Second Passenger</small>
+            </ion-label>
+          </ion-col>
+        </ion-row>
+    
+      </ion-grid>
+    </ion-item>
+    <!-- Total Cost -->
+    <ion-item lines="none">
+      <ion-grid>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="3">
+            <ion-button color="light" fill="clear">
+              <img src="https://img.icons8.com/cute-clipart/344/peso-symbol.png">              
+            </ion-button>
+           
+          </ion-col>
+            <ion-col size="7">
+            <ion-label>
+              <h4>250.00</h4>
+              <small>Total Cost</small>
+            </ion-label>
+          </ion-col>
+        
+          
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-button expand='block' >Proceed</ion-button>
 
-  <ion-button color="primary" expand="block" class="proceedBtn" (click)="proceed()">Proceed</ion-button>
+  </div>
+
 </ion-content>
