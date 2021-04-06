@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { CrudServiceService } from '../services/crud-service.service';
 import { MapsService } from '../services/maps.service';
+import { TravelServiceService } from '../services/travel-service.service';
 import { UserServiceService } from '../services/user-service.service';
 
 @Component({
@@ -11,55 +12,56 @@ import { UserServiceService } from '../services/user-service.service';
   styleUrls: ['./travel-cost.page.scss'],
 })
 export class TravelCostPage implements OnInit {
-  userInfo:object;
-  fullName:string;
+  userInfo: object;
+  fullName: string;
 
   // For the travel pick up location
   firstSummary: any = {
-    pickUp : null,
+    pickUp: null,
     dropOff: null,
+    price: null,
   };
 
   firstTravelTimeAndDistance: any = {
-    startLat:null,
-    startLng:null,
-    endLat:null,
-    endLng:null,
-    distance:null,
-    duration:null,
+    startLat: null,
+    startLng: null,
+    endLat: null,
+    endLng: null,
+    distance: null,
+    duration: null,
   };
   // for the travel pick up location
 
   // For the travel pick up location THIS IS FOR SECOND SUMMARY
   secondSummary: any = {
-    pickUp : null,
+    pickUp: null,
     dropOff: null,
     timeAndDistance: null,
   }
 
-  secondTravelTimeAndDistance:any = {
-    startLat:null,
-    startLng:null,
-    endLat:null,
-    endLng:null,
-    distance:null,
-    duration:null,
+  secondTravelTimeAndDistance: any = {
+    startLat: null,
+    startLng: null,
+    endLat: null,
+    endLng: null,
+    distance: null,
+    duration: null,
   };
   // FOR SECOND SUMMARY
 
-  commuterSelector:number = null;
-  sameDropOffLocation:boolean = true; // kapag nag null to commuter selector == 1,
+  commuterSelector: number = null;
+  sameDropOffLocation: boolean = true; // kapag nag null to commuter selector == 1,
 
   constructor(
-    private fauth : AuthService,
+    private fauth: AuthService,
     private userService: UserServiceService,
     private crudService: CrudServiceService,
     private mapsService: MapsService,
     private route: Router,
+    private travelService: TravelServiceService,
   ) { }
 
-  async ionViewWillEnter()
-  {
+  async ionViewWillEnter() {
 
     // update the properties in the maps service which will get from the travele service
     await this.mapsService.updateCommuterSelectorSameDropOffLocation();
@@ -99,28 +101,28 @@ export class TravelCostPage implements OnInit {
 
 
   async constructSecondSummaryProperty(pickUpLocation: any, secondDropOffLocation: any, startLat, startLng, endLat, endLng) {
-        // calculate the distance and duration
-        await this.mapsService.getDurationAndDistance(startLat, startLng, endLat, endLng).then(returnValue => {
+    // calculate the distance and duration
+    await this.mapsService.getDurationAndDistance(startLat, startLng, endLat, endLng).then(returnValue => {
 
-          let secondTravelTimeAndDistance = {
-            startLat:startLat,
-            startLng:startLng,
-            endLat:endLat,
-            endLng:endLng,
-            distanceAndDuration: returnValue,
-          };
+      let secondTravelTimeAndDistance = {
+        startLat: startLat,
+        startLng: startLng,
+        endLat: endLat,
+        endLng: endLng,
+        distanceAndDuration: returnValue,
+      };
 
-          this.secondTravelTimeAndDistance = secondTravelTimeAndDistance;
+      this.secondTravelTimeAndDistance = secondTravelTimeAndDistance;
 
-          let secondSummaryObj = {
-            pickUp: pickUpLocation.location,
-            dropOff: secondDropOffLocation.location,
-            distance: this.secondTravelTimeAndDistance.distanceAndDuration.distance,
-            duration: this.secondTravelTimeAndDistance.distanceAndDuration.duration,
-          };
+      let secondSummaryObj = {
+        pickUp: pickUpLocation.location,
+        dropOff: secondDropOffLocation.location,
+        distance: this.secondTravelTimeAndDistance.distanceAndDuration.distance,
+        duration: this.secondTravelTimeAndDistance.distanceAndDuration.duration,
+      };
 
-          this.secondSummary = secondSummaryObj;
-        });
+      this.secondSummary = secondSummaryObj;
+    });
   }
 
   async constructFirstSummaryProperty(pickUpLocation: any, dropOffLocation: any, startLat, startLng, endLat, endLng) {
@@ -128,21 +130,25 @@ export class TravelCostPage implements OnInit {
     await this.mapsService.getDurationAndDistance(startLat, startLng, endLat, endLng).then(returnValue => {
 
       let firstTravelTimeAndDistance = {
-        startLat:startLat,
-        startLng:startLng,
-        endLat:endLat,
-        endLng:endLng,
+        startLat: startLat,
+        startLng: startLng,
+        endLat: endLat,
+        endLng: endLng,
         distanceAndDuration: returnValue,
       };
 
       this.firstTravelTimeAndDistance = firstTravelTimeAndDistance;
 
+      // calculate price
+      let convertedDistance = this.travelService.getDistanceFromString(this.firstTravelTimeAndDistance.distanceAndDuration.distance);
+      let calculatedPrice = this.travelService.calculateSinglePassenger(convertedDistance);
 
       let firstSummaryObj = {
         pickUp: pickUpLocation.location,
         dropOff: dropOffLocation.location,
         distance: this.firstTravelTimeAndDistance.distanceAndDuration.distance,
         duration: this.firstTravelTimeAndDistance.distanceAndDuration.duration,
+        price: calculatedPrice,
       };
       this.firstSummary = firstSummaryObj;
     });
@@ -156,24 +162,26 @@ export class TravelCostPage implements OnInit {
   }
 
   // create a middleware when pick up location is null and drop off location is null redirect back to homepage
-  async middlewareDropOffPickUpLocation(){
+  async middlewareDropOffPickUpLocation() {
 
+    console.log(this.firstSummary.pickUp);
     if (this.firstSummary.pickUp == null) {
+      console.log('nag execute ako');
       this.route.navigate(['./tabs/home']);
     }
 
   }
 
-  ngOnInit(){
+  ngOnInit() {
 
   }
 
 
-  async proceed(){
+  async proceed() {
 
     // initialize current user info
     await this.userService.getCurrentUserInfo();
-    let secondPassengerName = this.mapsService.getSecondPassengerName();
+
     let objectSet = {
       "createdAt": Date.now(),
       "quantity_of_commuters": this.commuterSelector, // will vary
@@ -187,10 +195,12 @@ export class TravelCostPage implements OnInit {
         price: 100,
       },
       "second_summary": null, // will change later if commuterSelector is 2 and sameDropOffLocation = false
-      "second_passenger_name": secondPassengerName,
+      "second_passenger_name": null,
       "personal_information_passenger1": this.userService.getUserInfo(),
       "status": 'waiting',
     }
+
+    let secondPassengerName = this.mapsService.getSecondPassengerName();
 
     // determine if there is need for the second_summary
     if (this.sameDropOffLocation == false) {
@@ -203,6 +213,8 @@ export class TravelCostPage implements OnInit {
         duration: this.secondSummary.duration,
         price: 100,
       }
+
+      objectSet.second_passenger_name = secondPassengerName;
     }
 
     console.log(objectSet);

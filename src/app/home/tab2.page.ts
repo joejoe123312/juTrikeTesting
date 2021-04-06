@@ -99,9 +99,6 @@ export class Tab2Page {
   ionViewWillEnter() {
     // initiate map show default value is false
     // this.mapShow = this.mapsService.getMapShowStatus();
-    // console.log('nag enter ako');
-
-    //
 
     // initialize pickup and dropoff address
     this.getPickUpAndDropOffAddress();
@@ -412,7 +409,18 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
     // UP THE STATE
     this.travelServices.updateCommuterSelectorAndSameDropOffLocation(this.commuterSelector, this.sameDropOffLocation);
 
-    this.router.navigate(['./travel-cost']);
+    // validate if second passenger name is present.
+    let valid = true;
+    if ((this.secondPassengerName == null) && (this.commuterSelector == 2)) {
+      valid = false;
+      this.appalert.presentToast('Second passenger name is needed', 'danger', 4000 );
+    }
+
+    // validate if second passenger name is present.
+    if (valid == true) {
+      this.router.navigate(['./travel-cost']);
+    }
+
   }
 
   singlePersonBtn(){
