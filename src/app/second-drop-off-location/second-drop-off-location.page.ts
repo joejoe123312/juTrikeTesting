@@ -185,8 +185,8 @@ export class SecondDropOffLocationPage implements OnInit {
       // console.log(this.latitude, this.longitude, this.pickUpLocation);
 
 
-      this.closeModal();
-
+      // this.closeModal();
+      this.ClearAutocomplete();
 
 
   }

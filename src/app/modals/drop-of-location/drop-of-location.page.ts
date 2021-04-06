@@ -130,7 +130,7 @@ export class DropOfLocationPage implements OnInit {
       });
       this.getAddressfromLatLong(resp.coords.latitude, resp.coords.longitude);
 
-      loading.dismiss();
+      // loading.dismiss();
     }).catch((error) => {
       console.log('Error getting location', error);
     });
@@ -225,7 +225,7 @@ export class DropOfLocationPage implements OnInit {
       if (status == google.maps.GeocoderStatus.OK) {
           const lat = results[0].geometry.location.lat();
           const long = results[0].geometry.location.lng();
-          console.log('ako si lat: ', lat, 'ako si long: ', long);
+
           // CHange the pointer
           // Dito yung taas
           let latLng = new google.maps.LatLng(lat, long);
@@ -252,12 +252,13 @@ export class DropOfLocationPage implements OnInit {
 
     // update maps service so you can use the data in other pages
 
-    this.mapsService.updatePickUpLocation(this.latitude, this.longitude, this.pickUpLocation);
+    this.mapsService.updateDropOfLocation(this.latitude, this.longitude, this.pickUpLocation);
     console.log(this.latitude, this.longitude, this.pickUpLocation);
 
     // console.log(this.mapsService.getPickUpLocation());
 
-    this.closeModal();
+    this.ClearAutocomplete();
+    // this.closeModal();
 
   }
 
