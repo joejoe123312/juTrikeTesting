@@ -65,7 +65,6 @@ export class TravelCostPage implements OnInit {
 
     // update the properties in the maps service which will get from the travele service
     await this.mapsService.updateCommuterSelectorSameDropOffLocation();
-
     // get the values of the properties from the updated maps service
     await this.updatePropertyCommuterSelectorSameDropOffLocation();
 
@@ -79,7 +78,6 @@ export class TravelCostPage implements OnInit {
     let endLat = dropOffLocation.latitude;
     let endLng = dropOffLocation.longitude;
     await this.constructFirstSummaryProperty(pickUpLocation, dropOffLocation, startLat, startLng, endLat, endLng);
-
 
     if ((this.commuterSelector == 2) && (this.sameDropOffLocation == false)) {
       // get the second pick up location.
@@ -127,6 +125,12 @@ export class TravelCostPage implements OnInit {
 
   async constructFirstSummaryProperty(pickUpLocation: any, dropOffLocation: any, startLat, startLng, endLat, endLng) {
     // calculate the distance and duration
+
+    // validate if the user has inputs.
+    if (startLat == null) {
+      this.route.navigate(['./tabs/home']);
+    }
+
     await this.mapsService.getDurationAndDistance(startLat, startLng, endLat, endLng).then(returnValue => {
 
       let firstTravelTimeAndDistance = {
@@ -164,9 +168,7 @@ export class TravelCostPage implements OnInit {
   // create a middleware when pick up location is null and drop off location is null redirect back to homepage
   async middlewareDropOffPickUpLocation() {
 
-    console.log(this.firstSummary.pickUp);
     if (this.firstSummary.pickUp == null) {
-      console.log('nag execute ako');
       this.route.navigate(['./tabs/home']);
     }
 
