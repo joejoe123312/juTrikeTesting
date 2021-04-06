@@ -23,6 +23,7 @@ declare var google: any;
 })
 export class DropOfLocationPage implements OnInit {
   @ViewChild('map',  {static: false}) mapElement: ElementRef;
+
   modalTitle: string;
   modelId: number;
   map: any;
@@ -61,7 +62,7 @@ export class DropOfLocationPage implements OnInit {
   }
 
   ngOnInit() {
-
+    this.loadMap();
   }
 
   async closeModal() {
@@ -69,7 +70,27 @@ export class DropOfLocationPage implements OnInit {
     await this.modalController.dismiss();
   }
 
+  loadMap() {
+    const directionsRenderer = new google.maps.DirectionsRenderer();
+    const directionsService = new google.maps.DirectionsService();
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 15,
+      center: { lat: 17.613419058438215, lng:121.72716086550331 },
+      disableDefaultUI: true,
+      restriction: {
+        latLngBounds: {
+          north: 17.6867129,
+          south: 17.5174437,
+          east: 121.8369136,
+          west: 121.6820089,
+        },
+      },
+    });
+    directionsRenderer.setMap(map);
 
+
+    // this.calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng);
+  }
 
 
 
@@ -97,11 +118,13 @@ export class DropOfLocationPage implements OnInit {
       });
   }
 
+
+
   //FUNCTION SHOWING THE COORDINATES OF THE POINT AT THE CENTER OF THE MAP
   ShowCords(){
     alert('lat' +this.lat+', long'+this.long )
+    this.getAddressFromCoords(this.lat, this.long);
   }
-
   //AUTOCOMPLETE, SIMPLY LOAD THE PLACE USING GOOGLE PREDICTIONS AND RETURNING THE ARRAY.
   UpdateSearchResults(searchValue:string){
     this.autocomplete.input = searchValue;
@@ -176,8 +199,8 @@ export class DropOfLocationPage implements OnInit {
               // mapTypeId: google.maps.MapTypeId.ROADMAP
             }
             latLng = new google.maps.Map(document.getElementById('map'), mapOptions);
+            console.log(latLng);
         }
-
     });
 
       await this.convertAddressToLatLong(address);
@@ -188,11 +211,13 @@ export class DropOfLocationPage implements OnInit {
 
       // await console.log(this.mapsService.getDropOffAddress());
 
-      this.closeModal();
+      this.ClearAutocomplete();
 
+      // this.closeModal();
 
 
   }
+
 
    async convertAddressToLatLong(address){
 
