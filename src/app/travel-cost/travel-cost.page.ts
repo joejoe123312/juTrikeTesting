@@ -1,3 +1,4 @@
+import { computeDecimalDigest } from '@angular/compiler/src/i18n/digest';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -95,8 +96,7 @@ export class TravelCostPage implements OnInit {
     // if firstSummary.pickUp == null return to home.
     await this.middlewareDropOffPickUpLocation();
   }
-
-
+  
 
   async constructSecondSummaryProperty(pickUpLocation: any, secondDropOffLocation: any, startLat, startLng, endLat, endLng) {
     // calculate the distance and duration

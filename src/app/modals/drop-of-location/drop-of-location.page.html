@@ -24,13 +24,16 @@
     </div>
     <div id="floating-panel"></div>
 
-    <div id="right-panel" style=""></div>
-    <div id="map" style="height: 100%;"></div>
+    <div id="right-panel" ></div>
+    <div id="mapDrop" style="height: 100%;"></div>
   </div>
   <ion-fab vertical="bottom" horizontal="start" slot="fixed">
     <ion-fab-button (click)="ShowCords()" ion-fab color="tertiary">
       <ion-icon name="information-circle-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+   <ion-col size="6">
+    <ion-button shape="block" (click)="confirmLocation()" >Confirm</ion-button>
+  </ion-col>
 
 </ion-content>

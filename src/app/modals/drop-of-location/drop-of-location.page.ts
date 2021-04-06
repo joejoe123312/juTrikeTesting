@@ -13,6 +13,8 @@ import { ViewChild , ElementRef } from '@angular/core';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { MapsService } from '../../services/maps.service';
+import { ToastController } from '@ionic/angular';
+
 
 declare var google: any;
 
@@ -23,11 +25,10 @@ declare var google: any;
 })
 export class DropOfLocationPage implements OnInit {
   @ViewChild('map',  {static: false}) mapElement: ElementRef;
-
   modalTitle: string;
   modelId: number;
   map: any;
-  address:string;
+  address:any;
   lat: string;
   long: string;
   // used when autocomplete has been clicked
@@ -39,6 +40,10 @@ export class DropOfLocationPage implements OnInit {
   location: any;
   placeid: any;
   GoogleAutocomplete: any;
+
+  // current location of the user lat and long
+  currentUserLat: number;
+  currentUserLong: number;
 
   constructor(
     private modalController: ModalController,
@@ -53,44 +58,85 @@ export class DropOfLocationPage implements OnInit {
     private nativeGeocoder: NativeGeocoder,
     public zone: NgZone,
     public mapsService: MapsService,
+    public toastController: ToastController,
   )
   {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
     const geocoder = new google.maps.Geocoder();
+   }
+
+   async ngOnInit() {
+     await this.loadMap();
+     await this.setCurrentLocation();
   }
 
-  ngOnInit() {
-    this.loadMap();
-  }
-
-  async closeModal() {
-
+   async closeModal() {
     await this.modalController.dismiss();
   }
 
-  loadMap() {
-    const directionsRenderer = new google.maps.DirectionsRenderer();
-    const directionsService = new google.maps.DirectionsService();
-    const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 15,
-      center: { lat: 17.613419058438215, lng:121.72716086550331 },
-      disableDefaultUI: true,
-      restriction: {
-        latLngBounds: {
-          north: 17.6867129,
-          south: 17.5174437,
-          east: 121.8369136,
-          west: 121.6820089,
-        },
-      },
+  setCurrentLocation(){
+    return new Promise(resolve => {
+      this.geolocation.getCurrentPosition().then(resp => {
+        this.latitude = resp.coords.latitude;
+        this.longitude = resp.coords.longitude;
+
+        if (this.latitude != null) {
+          resolve('Done');
+        }
+      });
     });
-    directionsRenderer.setMap(map);
-
-
-    // this.calculateAndDisplayRoute(directionsService, directionsRenderer, startLat, startLng, endLat, endLng);
   }
+
+   //LOADING THE MAP HAS 2 PARTS.
+   async loadMap() {
+    const geocoder = new google.maps.Geocoder();
+    const infowindow = new google.maps.InfoWindow();
+
+    //FIRST GET THE LOCATION FROM THE DEVICE.
+    this.geolocation.getCurrentPosition().then((resp) => {
+      // 17.6578, 121.7083
+
+      let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+      let mapOptions = {
+        center: latLng,
+        zoom: 17,
+        disableDefaultUI: true,
+        restriction: {
+          latLngBounds: {
+            north: 17.6867129,
+            south: 17.5174437,
+            east: 121.8369136,
+            west: 121.6820089,
+          },
+        },
+        // mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+      latLng = new google.maps.Map(document.getElementById('mapDrop'), mapOptions);
+
+      //LOAD THE MAP WITH THE PREVIOUS VALUES AS PARAMETERS.
+      console.log(resp.coords.latitude, resp.coords.longitude, 'ako yung asa load map');
+
+      // set the response to the property to be checked later if it takes too long to get the response
+      this.currentUserLat = resp.coords.latitude;
+
+      this.getAddressFromCoords(resp.coords.latitude, resp.coords.longitude);
+      this.map = new google.maps.Map(document.getElementById('mapDrop'), mapOptions);
+      this.map.addListener('tilesloaded', () => {
+        this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
+        this.lat = this.map.center.lat()
+        this.long = this.map.center.lng()
+      });
+      this.getAddressfromLatLong(resp.coords.latitude, resp.coords.longitude);
+
+      loading.dismiss();
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+
+  }
+
 
 
 
@@ -112,19 +158,20 @@ export class DropOfLocationPage implements OnInit {
           this.address += value+", ";
         }
         this.address = this.address.slice(0, -2);
+        console.log('asa baba ako ni address.slice');
       })
-      .catch((error: any) =>{
+      .catch((error) =>{
         this.address = "Address Not Available!";
+        // alert(error);
       });
   }
-
-
 
   //FUNCTION SHOWING THE COORDINATES OF THE POINT AT THE CENTER OF THE MAP
   ShowCords(){
     alert('lat' +this.lat+', long'+this.long )
     this.getAddressFromCoords(this.lat, this.long);
   }
+
   //AUTOCOMPLETE, SIMPLY LOAD THE PLACE USING GOOGLE PREDICTIONS AND RETURNING THE ARRAY.
   UpdateSearchResults(searchValue:string){
     this.autocomplete.input = searchValue;
@@ -173,14 +220,12 @@ export class DropOfLocationPage implements OnInit {
 
     var geocoder = new google.maps.Geocoder();
 
-    let latitude = null;
-    let longitude = null;
-    geocoder.geocode( { 'address': address}, function(results, status) {
+    await geocoder.geocode( { 'address': address }, function(results, status) {
 
       if (status == google.maps.GeocoderStatus.OK) {
           const lat = results[0].geometry.location.lat();
           const long = results[0].geometry.location.lng();
-
+          console.log('ako si lat: ', lat, 'ako si long: ', long);
           // CHange the pointer
           // Dito yung taas
           let latLng = new google.maps.LatLng(lat, long);
@@ -198,26 +243,23 @@ export class DropOfLocationPage implements OnInit {
               },
               // mapTypeId: google.maps.MapTypeId.ROADMAP
             }
-            latLng = new google.maps.Map(document.getElementById('map'), mapOptions);
-            console.log(latLng);
+            latLng = new google.maps.Map(document.getElementById('mapDrop'), mapOptions);
         }
+
     });
 
-      await this.convertAddressToLatLong(address);
+    await this.convertAddressToLatLong(address);
 
-      // update maps service so you can use the data in other pages
+    // update maps service so you can use the data in other pages
 
-      await this.mapsService.updateDropOfLocation(this.latitude, this.longitude, this.pickUpLocation);
+    this.mapsService.updatePickUpLocation(this.latitude, this.longitude, this.pickUpLocation);
+    console.log(this.latitude, this.longitude, this.pickUpLocation);
 
-      // await console.log(this.mapsService.getDropOffAddress());
+    // console.log(this.mapsService.getPickUpLocation());
 
-      this.ClearAutocomplete();
-
-      // this.closeModal();
-
+    this.closeModal();
 
   }
-
 
    async convertAddressToLatLong(address){
 
@@ -252,6 +294,138 @@ export class DropOfLocationPage implements OnInit {
     return window.location.href = 'https://www.google.com/maps/search/?api=1&query=Google&query_place_id='+this.placeid;
   }
 
+  async confirmLocation(){
+    const loading =  await this.loadingCtrl.create({
+      message: "Pinning your address"
+    });
+    await loading.present();
+
+    /* kapag wala pa yung pick up location in less than N milli seconds throw an error */
+    this.validatePickUpLocation(loading, 1000);
+
+    // check if location is already set
+    if (this.lat == null) {
+      this.setCurrentLocation();
+    }
+
+
+    // get the location address name
+    this.getAddressFromCoords(this.lat, this.long);
+    console.clear();
+    // use reverse geocoding
+
+    let addressUsed = null;
+    await this.mapsService.getAddressfromLatLong(this.lat, this.long).subscribe(observedValue => {
+      this.address = observedValue;
+      console.log(typeof(this.address), 'ako dapat yung mauuna');
+
+      console.log(this.lat, this.long, addressUsed, 'ako dapat yung mahuhuli');
+
+      if (this.address == 'Address Not Available!') {
+        this.address = 'Pinned successfully';
+      }
+
+      this.mapsService.updateDropOfLocation(this.lat, this.long, this.address);
+
+      loading.dismiss();
+      this.closeModal();
+    });
+
+
+
+    // // console.log(this.lat, this.long, this.address);
+
+
+  }
+
+  // an observable that will count how long will the system process the confirm button.
+  // it will also activate when i takes too long
+  async validatePickUpLocation(loading:any, waitingTime:number,){
+
+    const toast = await this.toastController.create({
+      header: 'Slow internet connection',
+      message: 'Please confirm again',
+      position: 'top',
+      duration: 5000,
+      color: 'warning',
+    });
+
+    /* CREATE OBSERVERS */
+    // VALIDATE LATITUDE ---------
+    let validateLatitude = new Observable(observer => {
+
+      setTimeout(() => {
+        // check if may nalagay na values sa pick up location
+        var pickUpLocationValue = this.mapsService.getPickUpLocation();
+        observer.next(pickUpLocationValue.latitude);
+        observer.complete();
+      }, waitingTime);
+    });
+    // END VALIDATE LATITUDE ------
+
+     // VALIDATE LATITUDE ---------
+    let validateLongitude = new Observable(observer => {
+
+      setTimeout(() => {
+        // check if may nalagay na values sa pick up location
+        var pickUpLocationValue = this.mapsService.getPickUpLocation();
+        observer.next(pickUpLocationValue.longitude);
+        observer.complete();
+      }, waitingTime);
+    });
+    // END VALIDATE LATITUDE ------
+    /* CREATE OBSERVERS */
+
+    /* CREATE SUBSCRIBERS */
+    validateLatitude.subscribe(observedValue => {
+      if (observedValue == null) {
+        loading.dismiss();
+        toast.present();
+      }
+    });
+
+    validateLongitude.subscribe(observedValue => {
+      if (observedValue == null) {
+        loading.dismiss();
+        toast.present();
+      }
+    });
+    /* END SUBSCRIBERS */
+
+    // permission to close the modal
+    validateLongitude.subscribe(observableValue => {
+      if (observableValue != null) {
+        loading.dismiss();
+        this.closeModal();
+        // console.clear();
+      }
+    });
+  }
+
+getAddressfromLatLong(lat,long)
+{
+  const geocoder = new google.maps.Geocoder();
+  const infowindow = new google.maps.InfoWindow();
+  // 17.6188647 ,121.72674359999999
+  const latlng = {
+    lat: lat,
+    lng: long,
+  };
+  geocoder.geocode({ location: latlng }, (results, status) => {
+    if (status === "OK") {
+      if (results[0]) {
+        infowindow.setContent(results[0].formatted_address);
+        var infoAddress = results[0].formatted_address;
+        console.log(infoAddress, 'this log is from coor.resp.lat and long');
+      } else {
+        window.alert("No results found");
+      }
+    } else {
+      window.alert("Geocoder failed due to: " + status);
+    }
+  });
+
+}
 
 
 }
