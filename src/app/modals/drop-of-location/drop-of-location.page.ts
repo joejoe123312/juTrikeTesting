@@ -194,6 +194,7 @@ export class DropOfLocationPage implements OnInit {
       componentRestrictions: { country: "ph" },
       // location: defaultBounds,
       // radius: 1500,
+      
     }
 
     this.GoogleAutocomplete.getPlacePredictions(request,
@@ -230,6 +231,7 @@ export class DropOfLocationPage implements OnInit {
           // Dito yung taas
           let latLng = new google.maps.LatLng(lat, long);
             let mapOptions = {
+              gestureHandling: "none",
               center: latLng,
               zoom: 17,
               disableDefaultUI: true,
@@ -243,11 +245,13 @@ export class DropOfLocationPage implements OnInit {
               },
               // mapTypeId: google.maps.MapTypeId.ROADMAP
             }
-            latLng = new google.maps.Map(document.getElementById('mapDrop'), mapOptions);
+            // latLng = new google.maps.Map(document.getElementById('mapDrop'), mapOptions);
+            this.map = new google.maps.Map(document.getElementById('mapDrop'), mapOptions);
         }
 
-    });
+        
 
+    });
     await this.convertAddressToLatLong(address);
 
     // update maps service so you can use the data in other pages

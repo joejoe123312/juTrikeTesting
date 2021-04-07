@@ -243,6 +243,7 @@ export class SecondDropOffLocationPage implements OnInit {
              // mapTypeId: google.maps.MapTypeId.ROADMAP
            }
            latLng = new google.maps.Map(document.getElementById('mapDrop'), mapOptions);
+           
        }
 
    });
