@@ -218,14 +218,13 @@ export class DropOfLocationPage implements OnInit {
     let address = item.description;
 
     this.pickUpLocation = address;
-
     var geocoder = new google.maps.Geocoder();
 
     await geocoder.geocode( { 'address': address }, function(results, status) {
 
       if (status == google.maps.GeocoderStatus.OK) {
-          const lat = results[0].geometry.location.lat();
-          const long = results[0].geometry.location.lng();
+          let lat = results[0].geometry.location.lat();
+          let long = results[0].geometry.location.lng();
 
           // CHange the pointer
           // Dito yung taas
@@ -245,8 +244,11 @@ export class DropOfLocationPage implements OnInit {
               },
               // mapTypeId: google.maps.MapTypeId.ROADMAP
             }
-            // latLng = new google.maps.Map(document.getElementById('mapDrop'), mapOptions);
-            this.map = new google.maps.Map(document.getElementById('mapDrop'), mapOptions);
+            latLng = new google.maps.Map(document.getElementById('mapDrop'), mapOptions);
+
+          // update maps service so you can use the data in other pages
+
+
         }
 
         
@@ -254,12 +256,8 @@ export class DropOfLocationPage implements OnInit {
     });
     await this.convertAddressToLatLong(address);
 
-    // update maps service so you can use the data in other pages
-
     this.mapsService.updateDropOfLocation(this.latitude, this.longitude, this.pickUpLocation);
-    console.log(this.latitude, this.longitude, this.pickUpLocation);
-
-    // console.log(this.mapsService.getPickUpLocation());
+    console.log(this.mapsService.getDropOffLocation(), 'ako yung galing sa getDropOffLocation');
 
     this.ClearAutocomplete();
     // this.closeModal();
@@ -314,27 +312,27 @@ export class DropOfLocationPage implements OnInit {
     }
 
 
-    // get the location address name
-    this.getAddressFromCoords(this.lat, this.long);
-    console.clear();
-    // use reverse geocoding
+    // // get the location address name
+    // this.getAddressFromCoords(this.lat, this.long);
+    // console.clear();
+    // // use reverse geocoding
 
-    let addressUsed = null;
-    await this.mapsService.getAddressfromLatLong(this.lat, this.long).subscribe(observedValue => {
-      this.address = observedValue;
-      console.log(typeof(this.address), 'ako dapat yung mauuna');
+    // let addressUsed = null;
+    // await this.mapsService.getAddressfromLatLong(this.lat, this.long).subscribe(observedValue => {
+    //   this.address = observedValue;
+    //   console.log(typeof(this.address), 'ako dapat yung mauuna');
 
-      console.log(this.lat, this.long, addressUsed, 'ako dapat yung mahuhuli');
+    //   console.log(this.lat, this.long, addressUsed, 'ako dapat yung mahuhuli');
 
-      if (this.address == 'Address Not Available!') {
-        this.address = 'Pinned successfully';
-      }
+    //   if (this.address == 'Address Not Available!') {
+    //     this.address = 'Pinned successfully';
+    //   }
 
-      this.mapsService.updateDropOfLocation(this.lat, this.long, this.address);
+    //   this.mapsService.updateDropOfLocation(this.lat, this.long, this.address);
 
-      loading.dismiss();
-      this.closeModal();
-    });
+    //   loading.dismiss();
+    //   this.closeModal();
+    // });
 
 
 
@@ -421,7 +419,7 @@ getAddressfromLatLong(lat,long)
       if (results[0]) {
         infowindow.setContent(results[0].formatted_address);
         var infoAddress = results[0].formatted_address;
-        console.log(infoAddress, 'this log is from coor.resp.lat and long');
+        // console.log(infoAddress, 'this log is from coor.resp.lat and long');
       } else {
         window.alert("No results found");
       }
