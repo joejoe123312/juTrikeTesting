@@ -23,11 +23,11 @@
             <ion-card-title class="ion-margin-bottom" *ngIf="(commuterSelector ==1)">Travel Summary</ion-card-title>
             <ion-card-title class="ion-margin-bottom" *ngIf="(sameDropOffLocation == true)&& (commuterSelector ==2)">Travel Summary</ion-card-title>
             <ion-card-title class="ion-margin-bottom" *ngIf="(sameDropOffLocation == false)&& (commuterSelector ==2)">First Passenger</ion-card-title>
-            <ion-card-subtitle class="ion-text-left">Pick-up: {{firstSummary.pickUp}} </ion-card-subtitle>
-            <ion-card-subtitle class="ion-text-left">Drop-off: {{firstSummary.dropOff}} </ion-card-subtitle>
-            <ion-card-subtitle class="ion-text-left">Distance: {{firstSummary.distance}} </ion-card-subtitle>
-            <ion-card-subtitle class="ion-text-left">Duration:  {{firstSummary.duration}}</ion-card-subtitle>    
-            <ion-card-subtitle class="ion-text-left">Price: {{firstSummary.price}}</ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-left"><strong style="color: black;">Pick-up: </strong>{{firstSummary.pickUp}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-left"><strong style="color: black;">Drop-off:</strong> {{firstSummary.dropOff}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-left"><strong style="color: black;">Distance:</strong> {{firstSummary.distance}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-left"><strong style="color: black;">Duration:</strong>  {{firstSummary.duration}}</ion-card-subtitle>    
+            <ion-card-subtitle class="ion-text-left"><strong style="color: black;">Price: </strong> {{firstSummary.price}}</ion-card-subtitle>
      
 
           </ion-card-content>
@@ -43,10 +43,10 @@
           </ion-card-header>
           <ion-card-content class="ion-text-left">
             <ion-card-title class="ion-margin-bottom">Second Passenger </ion-card-title>
-            <ion-card-subtitle class="ion-text-left">Pick-up: {{secondSummary.pickUp}} </ion-card-subtitle>
-            <ion-card-subtitle class="ion-text-left">Drop-off: {{secondSummary.dropOff}} </ion-card-subtitle>
-            <ion-card-subtitle class="ion-text-left">Distance: {{secondSummary.distance}} </ion-card-subtitle>
-            <ion-card-subtitle class="ion-text-left">Duration:  {{secondSummary.duration}}</ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-left"><strong style="color: black;">Pick-up: </strong>{{secondSummary.pickUp}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-left"><strong style="color: black;">Drop-off:</strong> {{secondSummary.dropOff}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-left"><strong style="color: black;">Distance:</strong> {{secondSummary.distance}} </ion-card-subtitle>
+            <ion-card-subtitle class="ion-text-left"><strong style="color: black;">Duration:</strong>  {{secondSummary.duration}}</ion-card-subtitle>
             <!-- <ion-card-subtitle class="ion-text-right">Price: {{secondSummary.price}}</ion-card-subtitle> -->
          
             <ion-progress-bar value="0.5" color="custom"></ion-progress-bar>
