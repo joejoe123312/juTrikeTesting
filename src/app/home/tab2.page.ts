@@ -315,7 +315,7 @@ getDurationAndDistanec(startLat, startLng, endLat, endLng) {
       // determine if drop off location is already set
       const dropOffLocation = this.mapsService.getDropOffLocation();
       const pickUpLocation = this.mapsService.getPickUpLocation();
-
+      console.log(dropOffLocation, 'ako si drop off location na nasa on dismiss');
       if (dropOffLocation.location != null) {
 
         // get the latitude and longitude of the start and end locations
